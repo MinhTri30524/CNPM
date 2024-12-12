@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+
+</head>
+
+<body>
+    <div class="flex min-h-screen">
+        <!-- Phần menu dọc -->
+        {% block menu %}
+        {% include 'layout/menu.html' %}
+        {% endblock %}
+        <div class="flex-1">
+            <div class="sticky top-0 bg-[#2A3F54]">
+                <!-- Phần header -->
+                {% block header %}
+                {% include 'layout/header.html' %}
+                {% endblock %}
+            </div>
+            <div>
+                <!-- Các khối Nội Dụng -->
+                {% block content required %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+
+</html>

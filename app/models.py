@@ -55,7 +55,7 @@ if __name__ == '__main__':
         # c1 = Category(name='Mobile')
         # c2 = Category(name='Tablet')
         # c3 = Category(name='Desktop')
-        #
+        
         # db.session.add_all([c1, c2, c3])
         # db.session.commit()
 

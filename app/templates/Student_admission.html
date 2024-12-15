@@ -1,58 +1,156 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-<!-- Khung thông tin chính -->
-<div class="grid grid-cols-2 gap-4 w-full max-w-4xl">
-    <!-- Thông tin cá nhân -->
-    <div class="bg-white shadow-md rounded-lg p-6">
-        <div class="col-md-6 mb-3">
-            <label for="name" class="form-label">Họ Tên:</label>
-            <input type="text" class="form-control" id="name" placeholder="ex: Nguyễn Văn A" />
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
+    <!-- Phần tiêu đề -->
+    <h1 class="text-xl font-bold text-gray-700 mb-6">
+        Tiếp Nhận Học Sinh
+    </h1>
+
+    <!-- Khung thông tin chính -->
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Form Thêm Học Sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Thông Tin Học Sinh</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="field">
+                    <label for="name1">Họ tên</label>
+                    <input id="name1" type="text" class="border rounded p-2 w-full" placeholder="Nhập họ tên" />
+                </div>
+                <div class="field">
+                    <label for="birthdate">Ngày Sinh</label>
+                    <input type="date" id="birthdate" class="border rounded p-2 w-full" />
+                </div>
+                <div class="field">
+                    <label for="phone1">Số Điện Thoại</label>
+                    <input id="phone1" type="text" class="border rounded p-2 w-full" placeholder="Nhập số điện thoại" />
+                </div>
+                <div class="field">
+                    <label for="gender1">Giới Tính</label>
+                    <input id="gender1" type="text" class="border rounded p-2 w-full" placeholder="Nhập giới tính" />
+                </div>
+                <div class="field">
+                    <label for="address1">Địa Chỉ</label>
+                    <input id="address1" type="text" class="border rounded p-2 w-full" placeholder="Nhập địa chỉ" />
+                </div>
+                <div class="field">
+                    <label for="email1">Email</label>
+                    <input id="email1" type="text" class="border rounded p-2 w-full" placeholder="Nhập email" />
+                </div>
+            </div>
+            <div class="mt-4 flex gap-2">
+                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
+                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
+            </div>
         </div>
-        <div class="col-md-6 mb-3">
-            <label for="gender" class="form-label">Giới tính:</label>
-            <select id="gender" class="form-select">
-                <option value="" selected>Nam/Nữ</option>
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-            </select>
+
+        <!-- Danh Sách Học Sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Danh Sách Học Sinh</h2>
+            <ul id="studentList" class="list-disc pl-4 cursor-pointer">
+                <!-- Danh sách học sinh -->
+            </ul>
         </div>
-        <div class="col-md-6 mb-3">
-            <label for="dob" class="form-label">Ngày sinh:</label>
-            <input type="date" class="form-control" id="dob" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="address" class="form-label">Địa chỉ:</label>
-            <input type="text" class="form-control" id="address" placeholder="Địa chỉ" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="phone" class="form-label">SĐT:</label>
-            <input type="text" class="form-control" id="phone" placeholder="Số điện thoại" />
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="email" class="form-label">Email:</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" />
-        </div>
-        <div class="form-check mb-4">
-            <input class="form-check-input" type="checkbox" id="studentSelected" />
-            <label class="form-check-label" for="studentSelected">
-                Học sinh đang được chọn
-            </label>
-        </div>
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-primary mx-2">Lưu</button>
-            <button type="reset" class="btn btn-secondary mx-2">Hủy</button>
+
+        <!-- Thông Tin Chi Tiết -->
+        <div id="studentDetails" class="col-span-2 bg-white shadow-md rounded-lg p-6 hidden">
+            <h2 class="font-bold text-gray-700 mb-4">Chi Tiết Học Sinh</h2>
+            <p id="detailsContent" class="text-gray-700"></p>
         </div>
     </div>
 
-    <!-- Đổi lớp và Đăng xuất -->
-    <div class="grid grid-cols-1 gap-4">
-        <button class="bg-white shadow-md rounded-lg p-4 flex items-center justify-center text-blue-500 font-bold">
-            <i class="fa-solid fa-exchange-alt mr-2"></i> Đổi lớp
+
+    <!-- Các tiện ích của user đó -->
+    <!-- <div class="grid grid-cols-3 gap-4 mt-8 w-full max-w-4xl">
+        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
+            <i class="fa-solid fa-info-circle text-2xl mb-2"></i>
+            Thông tin liên lạc
         </button>
-        <button class="bg-white shadow-md rounded-lg p-4 flex items-center justify-center text-red-500 font-bold">
-            <i class="fa-solid fa-sign-out-alt mr-2"></i> Đăng xuất
+        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
+            <i class="fa-solid fa-bullhorn text-2xl mb-2"></i>
+            Diễn đàn
         </button>
-    </div>
+        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
+            <i class="fa-solid fa-envelope text-2xl mb-2"></i>
+            Nhắn tin
+        </button>
+    </div> -->
 </div>
+
+<script>
+    // Lấy các phần tử từ DOM
+    const addStudentBtn = document.getElementById('addStudentBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const studentList = document.getElementById('studentList');
+    const detailsContainer = document.getElementById('studentDetails');
+    const detailsContent = document.getElementById('detailsContent');
+
+    const nameInput = document.getElementById('name1');
+    const dobInput = document.getElementById('birthdate');
+    const phoneInput = document.getElementById('phone1');
+    const genderInput = document.getElementById('gender1');
+    const addressInput = document.getElementById('address1');
+    const emailInput = document.getElementById('email1');
+
+    // Mảng lưu danh sách học sinh
+    const students = [];
+
+    // Thêm học sinh
+    addStudentBtn.addEventListener('click', () => {
+        const student = {
+            name: nameInput.value.trim(),
+            dob: dobInput.value,
+            phone: phoneInput.value.trim(),
+            gender: genderInput.value.trim(),
+            address: addressInput.value.trim(),
+            email: emailInput.value.trim()
+        };
+
+        if (student.name && student.dob) {
+            students.push(student);
+            renderStudentList();
+            resetForm();
+        } else {
+            alert('Vui lòng nhập đầy đủ họ tên và ngày sinh.');
+        }
+    });
+
+    // Hiển thị danh sách học sinh
+    function renderStudentList() {
+        studentList.innerHTML = ''; // Xóa danh sách cũ
+        students.forEach((student, index) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${student.name} - ${student.dob}`;
+            listItem.className = "hover:underline text-blue-600";
+            listItem.addEventListener('click', () => showStudentDetails(index));
+            studentList.appendChild(listItem);
+        });
+    }
+
+    // Hiển thị thông tin chi tiết
+    function showStudentDetails(index) {
+        const student = students[index];
+        detailsContent.innerHTML = `
+        <strong>Họ tên:</strong> ${student.name} <br>
+        <strong>Ngày Sinh:</strong> ${student.dob} <br>
+        <strong>Số Điện Thoại:</strong> ${student.phone} <br>
+        <strong>Giới Tính:</strong> ${student.gender} <br>
+        <strong>Địa Chỉ:</strong> ${student.address} <br>
+        <strong>Email:</strong> ${student.email}
+    `;
+        detailsContainer.classList.remove('hidden');
+    }
+
+    // Reset form
+    resetBtn.addEventListener('click', resetForm);
+    function resetForm() {
+        nameInput.value = '';
+        dobInput.value = '';
+        phoneInput.value = '';
+        genderInput.value = '';
+        addressInput.value = '';
+        emailInput.value = '';
+    }
+
+</script>
 {% endblock %}

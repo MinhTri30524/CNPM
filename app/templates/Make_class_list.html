@@ -1,4 +1,231 @@
 {% extends 'layout/base.html' %}
+
 {% block content %}
- <h1>Lập Danh Sách Lớp</h1>
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
+    <!-- Phần tiêu đề -->
+    <h1 class="text-xl font-bold text-gray-700 mb-6">
+        Tiếp Nhận Học Sinh
+    </h1>
+
+    <!-- Khung thông tin chính -->
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Form Thêm Học Sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Danh Sách Lớp</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Dropdown -->
+                <div class="relative">
+                    <input type="text" id="treeSelectInput" placeholder="Select Item"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        readonly />
+                    <div id="dropdown"
+                        class="absolute z-10 hidden w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                        <ul class="max-h-60 overflow-auto">
+                            <!-- Parent Item -->
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                                    <span>Lớp 10</span>
+                                    <svg class="w-4 h-4 transform transition-transform"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <ul class="hidden pl-4 mt-2 border-l border-gray-300">
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 10A')">
+                                        Lớp 10A
+                                    </li>
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 10B')">
+                                        Lớp 10B
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- Another Parent Item -->
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                                    <span>Lớp 11</span>
+                                    <svg class="w-4 h-4 transform transition-transform"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <ul class="hidden pl-4 mt-2 border-l border-gray-300">
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 11A')">
+                                        Lớp 11A
+                                    </li>
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 11B')">
+                                        Lớp 11B
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                                    <span>Lớp 12</span>
+                                    <svg class="w-4 h-4 transform transition-transform"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <ul class="hidden pl-4 mt-2 border-l border-gray-300">
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 12A')">
+                                        Lớp 12A
+                                    </li>
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        onclick="selectOption('Lớp 12B')">
+                                        Lớp 12B
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Ô Sĩ Số -->
+            <div>
+                <label for="siSo" class="block text-gray-700 font-bold mb-2">Sĩ số:</label>
+                <input type="text" id="siSo"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    readonly placeholder="Chưa chọn lớp" />
+            </div>
+            <!-- Danh sách học sinh -->
+            <div class="bg-white shadow-md rounded-lg p-6 mb-6">
+                <h2 class="font-bold text-gray-700 mb-4">Danh Sách Học Sinh</h2>
+                <ul id="studentList" class="list-disc pl-4 cursor-pointer">
+                    <!-- Danh sách học sinh sẽ được thêm động -->
+                </ul>
+            </div>
+            <div class="mt-4 flex gap-2">
+                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
+                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
+            </div>
+        </div>
+
+        <!-- Form hiển thị thông tin học sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Thông Tin Học Sinh</h2>
+            <div id="studentInfo" class="hidden">
+                <p>
+                    <span class="font-bold">Họ và tên:</span>
+                    <span id="studentName" class="text-gray-600"></span>
+                </p>
+                <p class="mt-2">
+                    <span class="font-bold">Lớp:</span>
+                    <span id="studentClass" class="text-gray-600"></span>
+                </p>
+                <p class="mt-2">
+                    <span class="font-bold">Tuổi:</span>
+                    <span id="studentAge" class="text-gray-600"></span>
+                </p>
+            </div>
+            <p id="placeholder" class="text-gray-500">Vui lòng chọn một học sinh từ danh sách.</p>
+        </div>
+    </div>
+
+
+    <!-- Thông Tin Chi Tiết -->
+    <div id="studentDetails" class="col-span-2 bg-white shadow-md rounded-lg p-6 hidden">
+        <h2 class="font-bold text-gray-700 mb-4">Chi Tiết Học Sinh</h2>
+        <p id="detailsContent" class="text-gray-700"></p>
+    </div>
+</div>
+</div>
+
+<script>
+    const input = document.getElementById('treeSelectInput');
+    const dropdown = document.getElementById('dropdown');
+
+    // Hiển thị dropdown
+    input.addEventListener('click', () => {
+        dropdown.classList.toggle('hidden');
+    });
+
+    // Chọn option
+    function selectOption(value) {
+        input.value = value;
+        dropdown.classList.add('hidden');
+    }
+
+    // Mở/đóng danh sách con
+    function toggleChild(element) {
+        const childList = element.nextElementSibling;
+        const icon = element.querySelector('svg');
+        if (childList.classList.contains('hidden')) {
+            childList.classList.remove('hidden');
+            icon.classList.add('rotate-180');
+        } else {
+            childList.classList.add('hidden');
+            icon.classList.remove('rotate-180');
+        }
+    }
+
+    // Đóng dropdown khi nhấp ra ngoài
+    document.addEventListener('click', (e) => {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.add('hidden');
+        }
+    });
+
+
+    // Dữ liệu danh sách học sinh
+    const students = [
+        { name: "Nguyễn Văn A", class: "10A1", age: 16 },
+        { name: "Trần Thị B", class: "11B2", age: 17 },
+        { name: "Lê Văn C", class: "12C3", age: 18 },
+    ];
+
+    // Hàm render danh sách học sinh
+    function renderStudentList() {
+        const studentList = document.getElementById("studentList");
+        students.forEach((student, index) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = student.name;
+            listItem.className =
+                "text-gray-800 hover:text-blue-500 transition-colors cursor-pointer";
+            listItem.onclick = () => showStudentInfo(index);
+            studentList.appendChild(listItem);
+        });
+    }
+
+    // Hàm hiển thị thông tin học sinh
+    function showStudentInfo(index) {
+        const student = students[index];
+        document.getElementById("studentName").textContent = student.name;
+        document.getElementById("studentClass").textContent = student.class;
+        document.getElementById("studentAge").textContent = student.age;
+
+        // Ẩn placeholder và hiển thị thông tin
+        document.getElementById("placeholder").classList.add("hidden");
+        document.getElementById("studentInfo").classList.remove("hidden");
+    }
+
+    // Khởi tạo danh sách học sinh
+    renderStudentList();
+
+    // Chọn lớp và hiển thị sĩ số
+    function selectOption(className, siSo) {
+        document.getElementById("treeSelectInput").value = className;
+        document.getElementById("siSo").value = siSo + " học sinh";
+        toggleDropdown();
+    }
+</script>
 {% endblock %}

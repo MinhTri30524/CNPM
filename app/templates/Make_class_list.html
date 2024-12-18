@@ -22,7 +22,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <!-- Dropdown -->
                 <div class="relative">
-                    <input type="text" id="treeSelectInput" placeholder="Select Item"
+                    <input type="text" id="treeSelectInput" placeholder="Chọn lớp"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         readonly />
                     <div id="dropdown"
@@ -221,11 +221,6 @@
     // Khởi tạo danh sách học sinh
     renderStudentList();
 
-    // Chọn lớp và hiển thị sĩ số
-    function selectOption(className, siSo) {
-        document.getElementById("treeSelectInput").value = className;
-        document.getElementById("siSo").value = siSo + " học sinh";
-        toggleDropdown();
-    }
+    
 </script>
 {% endblock %}

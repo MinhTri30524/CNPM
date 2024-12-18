@@ -21,83 +21,73 @@
             <h2 class="font-bold text-gray-700 mb-4">Danh Sách Lớp</h2>
             <div class="grid grid-cols-2 gap-4">
                 <!-- Dropdown -->
-                <div class="relative">
-                    <input type="text" id="treeSelectInput" placeholder="Chọn lớp"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        readonly />
-                    <div id="dropdown"
-                        class="absolute z-10 hidden w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
+                <div class="relative w-72">
+                    <!-- Dropdown Trigger -->
+                    <button id="dropdownButton"
+                        class="w-auto px-2 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Chọn lớp
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="dropdownMenu"
+                        class="absolute hidden w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg">
                         <ul class="max-h-60 overflow-auto">
-                            <!-- Parent Item -->
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                            <!-- Lớp Cha -->
+                            <li>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+                                    onclick="toggleSubmenu(this)">
                                     <span>Lớp 10</span>
-                                    <svg class="w-4 h-4 transform transition-transform"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                                 <ul class="hidden pl-4 mt-2 border-l border-gray-300">
+                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer" 
+                                        onclick="selectOption('Lớp 10A')">Lớp 10A</li>
                                     <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 10A')">
-                                        Lớp 10A
-                                    </li>
-                                    <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 10B')">
-                                        Lớp 10B
-                                    </li>
+                                        onclick="selectOption('Lớp 10B')">Lớp 10B</li>
                                 </ul>
                             </li>
-
-                            <!-- Another Parent Item -->
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                            <li>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+                                    onclick="toggleSubmenu(this)">
                                     <span>Lớp 11</span>
-                                    <svg class="w-4 h-4 transform transition-transform"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                                 <ul class="hidden pl-4 mt-2 border-l border-gray-300">
                                     <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 11A')">
-                                        Lớp 11A
-                                    </li>
+                                        onclick="selectOption('Lớp 11A')">Lớp 11A</li>
                                     <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 11B')">
-                                        Lớp 11B
-                                    </li>
+                                        onclick="selectOption('Lớp 11B')">Lớp 11B</li>
                                 </ul>
                             </li>
-
-                            <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                <div class="flex justify-between items-center" onclick="toggleChild(this)">
+                            <li>
+                                <div class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex justify-between items-center"
+                                    onclick="toggleSubmenu(this)">
                                     <span>Lớp 12</span>
-                                    <svg class="w-4 h-4 transform transition-transform"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
+                                    <svg class="w-4 h-4 transition-transform" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </div>
                                 <ul class="hidden pl-4 mt-2 border-l border-gray-300">
                                     <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 12A')">
-                                        Lớp 12A
-                                    </li>
+                                        onclick="selectOption('Lớp 12A')">Lớp 12A</li>
                                     <li class="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                        onclick="selectOption('Lớp 12B')">
-                                        Lớp 12B
-                                    </li>
+                                        onclick="selectOption('Lớp 12B')">Lớp 12B</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
+
 
             </div>
             <!-- Ô Sĩ Số -->
@@ -110,12 +100,24 @@
             <!-- Danh sách học sinh -->
             <div class="bg-white shadow-md rounded-lg p-6 mb-6">
                 <h2 class="font-bold text-gray-700 mb-4">Danh Sách Học Sinh</h2>
-                <ul id="studentList" class="list-disc pl-4 cursor-pointer">
-                    <!-- Danh sách học sinh sẽ được thêm động -->
-                </ul>
+                <table class="min-w-full border border-gray-300 text-gray-700">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">STT</th>
+                            <th class="border px-4 py-2">Họ và Tên</th>
+                            <th class="border px-4 py-2">Lớp</th>
+                            <th class="border px-4 py-2">Tuổi</th>
+                            <th class="border px-4 py-2">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Hàng học sinh sẽ được thêm động -->
+                    </tbody>
+                </table>
             </div>
+
             <div class="mt-4 flex gap-2">
-                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
+                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Chọn học sinh</button>
                 <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
             </div>
         </div>
@@ -151,76 +153,128 @@
 </div>
 
 <script>
-    const input = document.getElementById('treeSelectInput');
-    const dropdown = document.getElementById('dropdown');
+    const dropdownButton = document.getElementById("dropdownButton");
+    const dropdownMenu = document.getElementById("dropdownMenu");
 
-    // Hiển thị dropdown
-    input.addEventListener('click', () => {
-        dropdown.classList.toggle('hidden');
+    // Toggle dropdown menu
+    dropdownButton.addEventListener("click", () => {
+        dropdownMenu.classList.toggle("hidden");
     });
 
-    // Chọn option
-    function selectOption(value) {
-        input.value = value;
-        dropdown.classList.add('hidden');
+    // Toggle submenu
+    function toggleSubmenu(element) {
+        const submenu = element.nextElementSibling;
+        submenu.classList.toggle("hidden");
+        const icon = element.querySelector("svg");
+        icon.classList.toggle("rotate-180");
     }
 
-    // Mở/đóng danh sách con
-    function toggleChild(element) {
-        const childList = element.nextElementSibling;
-        const icon = element.querySelector('svg');
-        if (childList.classList.contains('hidden')) {
-            childList.classList.remove('hidden');
-            icon.classList.add('rotate-180');
-        } else {
-            childList.classList.add('hidden');
-            icon.classList.remove('rotate-180');
-        }
+    // Select option
+    function selectOption(option) {
+        dropdownButton.textContent = option;
+        dropdownMenu.classList.add("hidden");
+
+        // Render danh sách học sinh theo lớp được chọn
+        renderStudentTable(option);
     }
 
-    // Đóng dropdown khi nhấp ra ngoài
-    document.addEventListener('click', (e) => {
-        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.add('hidden');
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (event) => {
+        if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add("hidden");
         }
     });
-
 
     // Dữ liệu danh sách học sinh
-    const students = [
-        { name: "Nguyễn Văn A", class: "10A1", age: 16 },
-        { name: "Trần Thị B", class: "11B2", age: 17 },
-        { name: "Lê Văn C", class: "12C3", age: 18 },
+    let students = [
+        { name: "Nguyễn Văn A", class: "10A", age: 16 },
+        { name: "Trần Thị B", class: "11B", age: 17 },
+        { name: "Lê Văn C", class: "12A", age: 18 },
+        { name: "Phạm Văn D", class: "10A", age: 16 },
+        { name: "Hoàng Thị E", class: "11A", age: 17 },
+        { name: "Võ Văn F", class: "12B", age: 18 },
     ];
 
-    // Hàm render danh sách học sinh
-    function renderStudentList() {
-        const studentList = document.getElementById("studentList");
-        students.forEach((student, index) => {
-            const listItem = document.createElement("li");
-            listItem.textContent = student.name;
-            listItem.className =
-                "text-gray-800 hover:text-blue-500 transition-colors cursor-pointer";
-            listItem.onclick = () => showStudentInfo(index);
-            studentList.appendChild(listItem);
+    // Hàm render danh sách học sinh trong bảng
+    function renderStudentTable(selectedClass = null) {
+        const tableBody = document.getElementById("studentTableBody");
+        const siSoInput = document.getElementById("siSo");
+        tableBody.innerHTML = ""; // Xóa dữ liệu cũ
+
+        // Lọc học sinh theo lớp
+        const filteredStudents = selectedClass
+            ? students.filter(student => student.class === selectedClass)
+            : students;
+
+        // Cập nhật sĩ số
+        siSoInput.value = selectedClass ? `Sĩ số: ${filteredStudents.length}` : "Chưa chọn lớp";
+
+        filteredStudents.forEach((student, index) => {
+            const row = document.createElement("tr");
+
+            // Cột số thứ tự
+            row.innerHTML += `<td class="border px-4 py-2 text-center">${index + 1}</td>`;
+            // Cột tên
+            row.innerHTML += `<td class="border px-4 py-2">${student.name}</td>`;
+            // Cột lớp
+            row.innerHTML += `<td class="border px-4 py-2 text-center">${student.class}</td>`;
+            // Cột tuổi
+            row.innerHTML += `<td class="border px-4 py-2 text-center">${student.age}</td>`;
+            // Cột hành động (Sửa & Xóa)
+            row.innerHTML += `
+            <td class="border px-4 py-2 text-center">
+                <button class="text-blue-500 hover:underline mr-2" onclick="editStudent(${students.indexOf(student)})">Sửa</button>
+                <button class="text-red-500 hover:underline" onclick="deleteStudent(${students.indexOf(student)})">Xóa</button>
+            </td>
+        `;
+
+            tableBody.appendChild(row);
         });
     }
 
-    // Hàm hiển thị thông tin học sinh
-    function showStudentInfo(index) {
-        const student = students[index];
-        document.getElementById("studentName").textContent = student.name;
-        document.getElementById("studentClass").textContent = student.class;
-        document.getElementById("studentAge").textContent = student.age;
+    // Reset danh sách học sinh và dropdown
+    function resetStudentList() {
+        dropdownButton.textContent = "Chọn lớp";
+        renderStudentTable(); // Hiển thị toàn bộ học sinh
+    }
 
-        // Ẩn placeholder và hiển thị thông tin
-        document.getElementById("placeholder").classList.add("hidden");
-        document.getElementById("studentInfo").classList.remove("hidden");
+    // Hàm xóa học sinh
+    function deleteStudent(index) {
+        if (confirm("Bạn có chắc chắn muốn xóa học sinh này?")) {
+            students.splice(index, 1); // Xóa học sinh khỏi mảng
+
+            // Render lại bảng với lớp hiện tại (nếu có)
+            const currentClass = dropdownButton.textContent !== "Chọn lớp"
+                ? dropdownButton.textContent
+                : null;
+            renderStudentTable(currentClass);
+        }
+    }
+
+    // Hàm sửa thông tin học sinh
+    function editStudent(index) {
+        const newName = prompt("Nhập tên mới:", students[index].name);
+        const newClass = prompt("Nhập lớp mới:", students[index].class);
+        const newAge = prompt("Nhập tuổi mới:", students[index].age);
+
+        if (newName && newClass && newAge) {
+            students[index] = { name: newName, class: newClass, age: parseInt(newAge) };
+
+            // Render lại bảng với lớp hiện tại (nếu có)
+            const currentClass = dropdownButton.textContent !== "Chọn lớp"
+                ? dropdownButton.textContent
+                : null;
+            renderStudentTable(currentClass);
+        } else {
+            alert("Thông tin không hợp lệ.");
+        }
     }
 
     // Khởi tạo danh sách học sinh
-    renderStudentList();
+    renderStudentTable();
 
-    
+    // Thêm sự kiện reset
+    document.getElementById("resetBtn").addEventListener("click", resetStudentList);
+
 </script>
 {% endblock %}

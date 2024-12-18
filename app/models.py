@@ -1,105 +1,109 @@
-import random
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum
-from app import db, app
 from enum import Enum as RoleEnum
-import hashlib
+from linecache import lazycache
+
 from flask_login import UserMixin
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, autoincrement
+from sqlalchemy.orm import relationship
 
-
-class UserRole(RoleEnum):
-    ADMIN = 1
-    USER = 2
+from app import db, app
 
 
 class User(db.Model, UserMixin):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(255), nullable=False)
-    username = Column(String(100), nullable=False, unique=True)
-    password = Column(String(100), nullable=False)
-    avatar = Column(String(100),
-                    default="https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg")
-    user_role = Column(Enum(UserRole), default=UserRole.USER)
+	id = Column(Integer, primary_key=True, autoincrement=True)
+	username = Column(String(100), unique=True)
+	password = Column(String(100))
+	fullname = Column(String(100))
+	avatar = Column(String(255))
 
 
-class Category(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False, unique=True)
-    products = relationship('Product', backref='category', lazy=True)
-
-    def __str__(self):
-        return self.name
+class LoaiDiemEnum(Enum):
+    KIEM_TRA_MIENG = 'Kiểm tra miệng'
+    KIEM_TRA_15_PHUT = 'Kiểm tra 15 phút'
+    GIUA_KY = 'Giữa kỳ'
+    CUOI_KY = 'Cuối kỳ'
 
 
-class Product(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), nullable=False, unique=True)
-    description = Column(String(255), nullable=True)
-    price = Column(Float, default=0)
-    image = Column(String(100), nullable=True)
-    category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
+class QuanTri(User):
+	pass
 
-    def __str__(self):
-        return self.name
+
+class NhanVien(User):
+	pass
+
+
+class HocSinh(db.Model):
+	id = Column(db.Integer, primary_key=True, autoincrement=True)
+	ten = Column(db.String(100))
+	hocs = relationship('Hoc', backref='hoc_sinh', lazy=True)  # Quan hệ với Hoc
+	bang_diems = relationship('BangDiem', backref='hoc_sinh', lazy=True)  # Quan hệ với Bang
+
+	def __str__(self):
+		return self.ten
+
+
+class LopHoc(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	ten = Column(db.String(100))
+	hoc_sinhs = relationship('HocSinh', backref='lop_hoc', lazy=True)  # Quan hệ với HocSinh
+	hocs = relationship('Hoc', backref='lop_hoc', lazy=True)  # Quan hệ với Hoc
+	khoi_id = Column(db.Integer, db.ForeignKey('khoi.id'))
+
+	def __str__(self):
+		return self.ten
+
+
+class Khoi(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	ten = Column(db.String(100))
+	lops = relationship('LopHoc', backref='khoi', lazy=True)  # Quan hệ với LopHoc
+# Thêm các field và method tương ứng
+
+
+class Hoc(db.Model):
+	lop_hoc_id = Column(db.Integer, db.ForeignKey('lop_hoc.id'), primary_key=True)
+	hoc_sinh_id = Column(db.Integer, db.ForeignKey('hoc_sinh.id'), primary_key=True)
+
+
+class MonHoc(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	ten = Column(db.String(100))
+# Thêm các field và method tương ứng
+
+	def __str__(self):
+		return self.ten
+
+
+class BangDiem(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	hoc_ky_id = Column(db.Integer, db.ForeignKey('hoc_ky.id'))
+	mon_hoc_id = Column(db.Integer, db.ForeignKey('mon_hoc.id'))
+	hoc_sinh_id = Column(db.Integer, db.ForeignKey('hoc_sinh.id'))
+	diems = relationship('Diem', backref='bang_diem', lazy=True)  # Quan hệ với Diem
+
+
+class Diem(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	diem = Column(db.Float, nullable=False)
+	bangdiem_id = Column(db.Integer, db.ForeignKey('bang_diem.id'))
+	loai_diem = Column(db.Enum(LoaiDiemEnum), nullable=False)
+
+
+class HocKy(db.Model):
+	id = Column(db.Integer, primary_key=True)
+	ten = Column(db.String(100))
+	bang_diems = relationship('BangDiem', backref='hoc_ky', lazy=True)  # Quan hệ với BangDiem
+
+	def __str__(self):
+		return self.ten
+
+
+class GiangVien(db.Model):
+	id = Column(db.Integer, primary_key=True, autoincrement=True)
+
+	def __str__(self):
+		return self.ten
 
 
 if __name__ == '__main__':
-    with app.app_context():
-        # db.create_all()
-
-        # u = User(name='admin', username='admin', password=str(hashlib.md5('123456'.encode('utf-8')).hexdigest()),
-        #          user_role=UserRole.ADMIN)
-        # db.session.add(u)
-        # db.session.commit()
-        #
-        # c1 = Category(name='Mobile')
-        # c2 = Category(name='Tablet')
-        # c3 = Category(name='Desktop')
-        #
-        # db.session.add_all([c1, c2, c3])
-        # db.session.commit()
-
-        data = [{
-            "name": "iPhone 7 Plus",
-            "description": "Apple, 32GB, RAM: 3GB, iOS13",
-            "price": 17000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1688179242/hclq65mc6so7vdrbp7hz.jpg",
-            "category_id": 1
-        }, {
-            "name": "iPad Pro 2020",
-            "description": "Apple, 128GB, RAM: 6GB",
-            "price": 37000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg",
-            "category_id": 2
-        }, {
-            "name": "iPad Pro 2021",
-            "description": "Apple, 128GB, RAM: 6GB",
-            "price": 37000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg",
-            "category_id": 2
-        }, {
-            "name": "iPad Pro 2022",
-            "description": "Apple, 128GB, RAM: 6GB",
-            "price": 37000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg",
-            "category_id": 2
-        }, {
-            "name": "iPad Pro 2023",
-            "description": "Apple, 128GB, RAM: 6GB",
-            "price": 37000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg",
-            "category_id": 2
-        }, {
-            "name": "iPad Pro 2024",
-            "description": "Apple, 128GB, RAM: 6GB",
-            "price": 37000000,
-            "image": "https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg",
-            "category_id": 2
-        }]
-
-        for p in data:
-            prod = Product(name=p['name'] + ' ' + str(random.randint(1, 100)), description=p['description'], price=p['price'],
-                           image=p['image'], category_id=p['category_id'])
-            db.session.add(prod)
-
-        db.session.commit()
+	with app.app_context():
+		db.create_all()

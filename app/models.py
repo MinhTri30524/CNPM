@@ -1,22 +1,20 @@
-from enum import Enum as RoleEnum
-from linecache import lazycache
-
+import enum
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, autoincrement
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
 from app import db, app
 
 
 class User(db.Model, UserMixin):
-	id = Column(Integer, primary_key=True, autoincrement=True)
+	id = Column(Integer, primary_key=True)
 	username = Column(String(100), unique=True)
 	password = Column(String(100))
 	fullname = Column(String(100))
 	avatar = Column(String(255))
 
 
-class LoaiDiemEnum(Enum):
+class LoaiDiemEnum(enum.Enum):
     KIEM_TRA_MIENG = 'Kiểm tra miệng'
     KIEM_TRA_15_PHUT = 'Kiểm tra 15 phút'
     GIUA_KY = 'Giữa kỳ'
@@ -32,7 +30,7 @@ class NhanVien(User):
 
 
 class HocSinh(db.Model):
-	id = Column(db.Integer, primary_key=True, autoincrement=True)
+	id = Column(db.Integer, primary_key=True)
 	ten = Column(db.String(100))
 	hocs = relationship('Hoc', backref='hoc_sinh', lazy=True)  # Quan hệ với Hoc
 	bang_diems = relationship('BangDiem', backref='hoc_sinh', lazy=True)  # Quan hệ với Bang
@@ -85,7 +83,7 @@ class Diem(db.Model):
 	id = Column(db.Integer, primary_key=True)
 	diem = Column(db.Float, nullable=False)
 	bangdiem_id = Column(db.Integer, db.ForeignKey('bang_diem.id'))
-	loai_diem = Column(db.Enum(LoaiDiemEnum), nullable=False)
+	loai_diem = Column(Enum(LoaiDiemEnum), nullable=False)
 
 
 class HocKy(db.Model):
@@ -98,7 +96,7 @@ class HocKy(db.Model):
 
 
 class GiangVien(db.Model):
-	id = Column(db.Integer, primary_key=True, autoincrement=True)
+	id = Column(db.Integer, primary_key=True)
 
 	def __str__(self):
 		return self.ten

@@ -5,21 +5,14 @@ from flask_login import login_user, logout_user
 
 from app import app, login
 from app import dao, utils
-from app.models import UserRole
+# from app.models import UserRole
 
 
 # Trang chủ
 @app.route("/")
 def index():
-	kw = request.args.get('kw')
-	cate_id = request.args.get('category_id')
-	page = request.args.get('page', 1)
 
-	prods = dao.load_products(kw=kw, category_id=cate_id, page=int(page))
-
-	total = dao.count_products()
-	return render_template('index.html', products=prods,
-						   pages=math.ceil(total / app.config["PAGE_SIZE"]))
+	return render_template('index.html')
 
 
 # Load trang login
@@ -38,16 +31,16 @@ def login_process():
 
 
 # load trang admin
-@app.route("/login-admin", methods=['post'])
-def login_admin_process():
-	username = request.form.get('username')
-	password = request.form.get('password')
-
-	u = dao.auth_user(username=username, password=password, role=UserRole.ADMIN)
-	if u:
-		login_user(u)
-
-	return redirect('/admin')
+# @app.route("/login-admin", methods=['post'])
+# def login_admin_process():
+# 	username = request.form.get('username')
+# 	password = request.form.get('password')
+#
+# 	u = dao.auth_user(username=username, password=password, role=UserRole.ADMIN)
+# 	if u:
+# 		login_user(u)
+#
+# 	return redirect('/admin')
 
 
 # Sử lý đăng xuất
@@ -158,14 +151,6 @@ def Change_rules():
 @login.user_loader
 def load_user(user_id):
 	return dao.get_user_by_id(user_id)
-
-
-@app.context_processor
-def common_response_data():
-	return {
-		'categories': dao.load_categories(),
-		'cart_stats': utils.cart_stats(session.get('cart'))
-	}
 
 
 if __name__ == '__main__':

@@ -10,10 +10,9 @@ from app import db, app
 
 # Enum cho loại điểm
 class LoaiDiemEnum(enum.Enum):
-	KIEM_TRA_MIENG = 'Kiểm tra miệng'
-	KIEM_TRA_15_PHUT = 'Kiểm tra 15 phút'
-	GIUA_KY = 'Giữa kỳ'
-	CUOI_KY = 'Cuối kỳ'
+	KIEM_TRA_15_PHUT = 1
+	GIUA_KY = 2
+	CUOI_KY = 3
 
 
 class UserRole(RoleEnum):

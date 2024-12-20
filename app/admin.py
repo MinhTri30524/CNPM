@@ -4,13 +4,14 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, logout_user
 from flask_admin import BaseView, expose
 from flask import redirect
+from app.models import HocSinh, NhanVien
 
-admin = Admin(app, name='ecourseapp', template_mode='bootstrap4')
+admin = Admin(app, name='Administration', template_mode='bootstrap4')
 
 
 class AuthenticatedView(ModelView):
     def is_accessible(self):
-        return current_user.is_authenticated and current_user.user_role.__eq__(UserRole.ADMIN)
+        pass
 
 
 class CategoryView(AuthenticatedView):
@@ -23,7 +24,6 @@ class CategoryView(AuthenticatedView):
 
 class ProductView(AuthenticatedView):
     pass
-
 
 
 class MyView(BaseView):

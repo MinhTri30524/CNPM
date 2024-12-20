@@ -1,4 +1,4 @@
-from app.models import User, HocSinh,GiangVien
+from app.models import User, HocSinh,GiangVien, LopHoc
 from app import app, db
 import hashlib
 import cloudinary.uploader
@@ -47,8 +47,20 @@ def get_teacher():
     teachers = [teacher.to_dict() for teacher in gv]
     return teachers
 
+#lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
+def get_students_no_Class():
+	students = HocSinh.getStudents_no_Class()
+	return students
 
+#tra ve hoc sinh theo id lop ho da co san
+def get_stdents_in_class(class_id):
+	students_in_class = HocSinh.get_students_in_class(class_id)
+	return students_in_class
 
+#lay tat ca cac lop hoc da duoc tao ra
+def get_class():
+	class_id = LopHoc.get_all_class()
+	return class_id
 
 def get_user_by_id(ma_nhan_vien):
 	return User.query.get(ma_nhan_vien)

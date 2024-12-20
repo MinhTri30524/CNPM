@@ -58,6 +58,44 @@ class HocSinh(db.Model):
 
     def __str__(self):
         return self.ma_hoc_sinh
+    
+    @staticmethod
+    def getStudents_no_Class():
+        #ham tra ve cac hoc sinh da dang ky nhap hoc ma chua co lop hoc
+        students_no_class = db.session.query(HocSinh).filter(HocSinh.lop_hoc_id == None).all()
+        result = [
+            {
+                "ma_hoc_sinh": student.ma_hoc_sinh,
+                "ho_ten": student.ho_ten,
+                "ngay_sinh": student.ngay_sinh.strftime("%Y-%m-%d") if student.ngay_sinh else None,
+                "gioi_tinh": student.gioi_tinh,
+                "dia_chi": student.dia_chi,
+                "mail": student.mail,
+            }
+            for student in students_no_class
+        ]
+        return result
+    
+    
+    @staticmethod
+    def get_students_in_class(lop_id):
+        students_in_class = db.session.query(HocSinh).filter(HocSinh.lop_hoc_id == lop_id).all()
+        result = [
+            {
+                "ma_hoc_sinh": student.ma_hoc_sinh,
+                "ho_ten": student.ho_ten,
+                "ngay_sinh": student.ngay_sinh.strftime("%Y-%m-%d") if student.ngay_sinh else None,
+                "gioi_tinh": student.gioi_tinh,
+                "dia_chi": student.dia_chi,
+                "mail": student.mail,
+            }
+            for student in students_in_class
+        ]
+        return result
+
+
+
+
 
 # Lớp Giảng viên kế thừa từ User
 class GiangVien(User):
@@ -90,9 +128,22 @@ class LopHoc(db.Model):
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'ten_lop': self.ten_lop,
+            'id': self.ma_lop,
+            'ten_lop': self.ten,
         }
+    @staticmethod
+    def get_all_class():
+        classes = db.session.query(LopHoc).all()
+        result = [
+            {
+                "ma_lop": _class.ma_lop,
+                "ten_lop": _class.ten,
+                # Các cột khác nếu có...
+            }
+            for _class in classes
+        ]
+        return result
+
 
 # Lớp Khối
 class Khoi(db.Model):

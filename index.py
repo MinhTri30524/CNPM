@@ -35,6 +35,28 @@ def get_teacher():
 	return jsonify({"message": "Student added successfully", "data": teacher})
 
 
+#lay tra ca hoc sinh chua co lop ra ra
+@app.route("/api/get_students_no_class", methods=["POST"])
+def get_students_no_class():
+	studens_no_class = dao.get_students_no_Class()
+	return jsonify({"message":"successfully","data":studens_no_class})
+
+#lay hoc sinh ra theo lop
+@app.route("/api/get_students_in_class", methods=["POST"])
+def get_students_in_class():
+	data =request.get_json()
+	# {
+	# 	"malop:" 1,
+	# 	"tenLop":2
+	# }
+	student_in_class = dao.get_stdents_in_class(data["malop"])
+	return jsonify({"message":"successfully","data":student_in_class})
+
+#api tra ta ca lop hoc da duoc tao ra
+@app.route("/api/get_class", methods=["POST"])
+def get_class():
+	class_id = dao.get_class()
+	return jsonify({"message":"successfully","data":class_id})
 
 
 #them hoc sinh vao database

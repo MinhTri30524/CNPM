@@ -1,8 +1,6 @@
 import math
-
 from flask import render_template, request, redirect, session, jsonify
 from flask_login import login_user, logout_user
-
 from app import app, login
 from app import dao, utils
 # from app.models import UserRole
@@ -11,7 +9,6 @@ from app import dao, utils
 # Trang chủ
 @app.route("/")
 def index():
-
 	return render_template('index.html')
 
 
@@ -21,13 +18,39 @@ def login_process():
 	if request.method.__eq__('POST'):
 		username = request.form.get('username')
 		password = request.form.get('password')
-
+		print("11111111111111111==>",username)
+		print("2222222222222222==>",password)
 		u = dao.auth_user(username=username, password=password)
+		print("iuuuuuuu===>",u)
 		if u:
 			login_user(u)
 			return redirect('/')
 
 	return render_template('login.html')
+
+#lay cac giang vien ra
+@app.route("/api/get_teacher", methods=["POST"])
+def get_teacher():
+	teacher = dao.get_teacher()
+	return jsonify({"message": "Student added successfully", "data": teacher})
+
+
+
+
+#them hoc sinh vao database
+@app.route("/api/add_Student", methods=['POST'])
+def add_student():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	data = data["student"]
+	print("data====>",data["name"])
+	dao.add_student(data["name"],data["dob"],data["phone"],data["gender"],data["address"],data["email"])
+
+	# Kiểm tra dữ liệu hợp lệ
+	if not data:
+		return jsonify({"error": "No data provided"}), 400
+	# Trả về phản hồi thành công
+	return jsonify({"message": "Student added successfully", "data": data}), 201
 
 
 # load trang admin
@@ -61,6 +84,7 @@ def register_process():
 		if password.__eq__(confirm):
 			data = request.form.copy()
 			del data['confirm']
+			print("data======>",data)
 
 			avatar = request.files.get('avatar')
 			dao.add_user(avatar=avatar, **data)
@@ -71,44 +95,6 @@ def register_process():
 
 	return render_template('register.html', err_msg=err_msg)
 
-
-# api lưu trữ dữ liệu - lấy dữ liệu
-@app.route("/api/carts", methods=['post'])
-def add_to_cart():
-	# {
-	#     "1": {
-	#         "id": 1,
-	#         "name": 'iphone',
-	#         "price": 123,
-	#         "quantity": 2
-	#     }, "2": {
-	#         "id": 2,
-	#         "name": 'iphone',
-	#         "price": 123,
-	#         "quantity": 2
-	#     }
-	# }
-	cart = session.get('cart')
-	if not cart:
-		cart = {}
-
-	id = str(request.json.get('id'))
-	name = request.json.get('name')
-	price = request.json.get('price')
-
-	if id in cart:
-		cart[id]['quantity'] = cart[id]['quantity'] + 1
-	else:
-		cart[id] = {
-			"id": id,
-			"name": name,
-			"price": price,
-			"quantity": 1
-		}
-
-	session['cart'] = cart
-
-	return jsonify(utils.cart_stats(cart))
 
 
 # Load Trang Tiếp Nhận Học Sinh
@@ -153,6 +139,12 @@ def load_user(user_id):
 	return dao.get_user_by_id(user_id)
 
 
+@app.route("/login-admin", methods=['post'])
+def login_admin_process():
+    return redirect('/admin')
+
+
 if __name__ == '__main__':
 	with app.app_context():
+		from app import admin
 		app.run(debug=True)

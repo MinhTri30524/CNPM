@@ -63,12 +63,24 @@ class HocSinh(db.Model):
 class GiangVien(User):
     __tablename__ = 'giang_vien'
     ma_nhan_vien = Column(Integer, ForeignKey('user.ma_nhan_vien'), primary_key=True)
-    lop_hoc = relationship('LopHoc', back_populates='giang_vien', uselist=False)  # Quan hệ 1-1
+    lop_hoc = relationship('LopHoc', back_populates='giang_vien', uselist=False)
+    def to_dict(self):
+        # Trả về thông tin kết hợp giữa GiangVien và User
+        user_info = User.query.filter_by(ma_nhan_vien=self.ma_nhan_vien).first()
+        return {
+            "ma_nhan_vien": self.ma_nhan_vien,
+            "ho_ten": user_info.ho_ten,
+            "username": user_info.username,
+            "avatar": user_info.avatar,
+            "user_role": user_info.user_role.name,  # Nếu UserRole là Enum
+        }
+      # Quan hệ 1-1
 
 # Lớp Lớp học
 class LopHoc(db.Model):
     __tablename__ = 'lop_hoc'
     ma_lop = Column(Integer, primary_key=True)
+    so_luong = Column(Integer, nullable=False)
     ten = Column(String(100), nullable=False)
     giang_vien_id = Column(Integer, ForeignKey('giang_vien.ma_nhan_vien'), unique=True)  # Quan hệ 1-1
     khoi_id = Column(Integer, ForeignKey('khoi.id'))
@@ -76,8 +88,11 @@ class LopHoc(db.Model):
     hocs = relationship('Hoc', backref='lop_hoc', lazy=True)
     giang_vien = relationship('GiangVien', back_populates='lop_hoc', uselist=False)
 
-    def __str__(self):
-        return self.ten
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'ten_lop': self.ten_lop,
+        }
 
 # Lớp Khối
 class Khoi(db.Model):

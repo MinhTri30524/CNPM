@@ -1,33 +1,54 @@
-from app.models import User
+from app.models import User, HocSinh,GiangVien
 from app import app, db
 import hashlib
 import cloudinary.uploader
+from flask import jsonify
 
-
+#lấy user đó ra
 def auth_user(username, password, role=None):
 	password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
 	u = User.query.filter(User.username.__eq__(username.strip()),
 						  User.password.__eq__(password))
+	print("uuuuuuuuuuuuuuuu===>",u)
 	if role:
 		u = u.filter(User.user_role.__eq__(role))
+		print("role=====>",role)
 
 	return u.first()
 
-
-def add_user(name, username, password, avatar):
+# Thêm người dùng mới
+def add_user(id, name, username, password, avatar):
 	password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
-
-	u = User(name=name, username=username, password=password,
-			 avatar='https://res.cloudinary.com/dxxwcby8l/image/upload/v1690528735/cg6clgelp8zjwlehqsst.jpg')
-
+	u = User(ma_nhan_vien=id, ho_ten=name, username=username, password=password,
+			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg')
 	if avatar:
 		res = cloudinary.uploader.upload(avatar)
 		u.avatar = res.get('secure_url')
-
+    
 	db.session.add(u)
 	db.session.commit()
+#thêm một học sinh mới
+def add_student(name, birthDate,phone, sex, address, email ):
+	print(name)
+	add = HocSinh(ho_ten = name, ngay_sinh = birthDate, gioi_tinh=sex, std=phone, dia_chi=address, mail=email)
+	db.session.add(add)
+	db.session.commit()
+
+#tạo một lớp học mới
+def aad_class_Student(malop, so_luong, ten, giang_vien):
+	pass
+
+#Lấy tất cả giảng viên ra
+def get_teacher():
+    # Lấy tất cả giảng viên từ bảng GiangVien
+    gv = GiangVien.query.all()
+    # Chuyển mỗi giảng viên thành từ điển bằng phương thức to_dict()
+    teachers = [teacher.to_dict() for teacher in gv]
+    return teachers
 
 
-def get_user_by_id(id):
-	return User.query.get(id)
+
+
+def get_user_by_id(ma_nhan_vien):
+	return User.query.get(ma_nhan_vien)

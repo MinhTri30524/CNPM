@@ -1,4 +1,117 @@
 {% extends 'layout/base.html' %}
+
 {% block content %}
- <h1>Xuất Điểm</h1>
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
+    <!-- Phần tiêu đề -->
+    <h1 class="text-xl font-bold text-gray-700 mb-6">
+        Xuất Điểm Trung Bình Lớp
+    </h1>
+
+    <!-- Khung thông tin chính -->
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Form Xuất Điểm Trung Bình -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Xuất Điểm Trung Bình Lớp</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Chọn Năm Học -->
+                <div>
+                    <label for="academicYear" class="block text-gray-700 font-bold mb-2">Năm học:</label>
+                    <select id="academicYear"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Chọn năm học</option>
+                        <option value="2022-2023">2022-2023</option>
+                        <option value="2021-2022">2021-2022</option>
+                        <option value="2020-2021">2020-2021</option>
+                    </select>
+                </div>
+
+                <!-- Nhập Tên Học Sinh -->
+                <div>
+                    <label for="studentName" class="block text-gray-700 font-bold mb-2">Tên học sinh:</label>
+                    <input type="text" id="studentName" placeholder="Nguyễn Văn A"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Nhập Lớp -->
+                <div>
+                    <label for="class" class="block text-gray-700 font-bold mb-2">Lớp:</label>
+                    <input type="text" id="class" placeholder="10A"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Nút Xuất -->
+                <div class="col-span-2 flex justify-end">
+                    <button id="exportBtn"
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng Điểm Trung Bình Lớp -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Bảng Điểm Trung Bình Lớp</h2>
+            <table class="min-w-full border border-gray-300 text-gray-700">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border px-4 py-2">STT</th>
+                        <th class="border px-4 py-2">Họ tên</th>
+                        <th class="border px-4 py-2">Lớp</th>
+                        <th class="border px-4 py-2">Điểm TB HK1</th>
+                        <th class="border px-4 py-2">Điểm TB HK2</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreTable">
+                    <!-- Kết quả sẽ được thêm vào đây -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Dữ liệu mẫu (giả lập từ cơ sở dữ liệu)
+    const data = [
+        { name: "Nguyễn Văn A", class: "10A", year: "2022-2023", tbhk1: 8.5, tbhk2: 9.0 },
+        { name: "Trần Thị B", class: "10A", year: "2022-2023", tbhk1: 7.8, tbhk2: 8.2 },
+        { name: "Lê Văn C", class: "10B", year: "2021-2022", tbhk1: 6.5, tbhk2: 7.0 },
+    ];
+
+    // Xử lý sự kiện khi nhấn nút "Xuất"
+    document.getElementById('exportBtn').addEventListener('click', () => {
+        const year = document.getElementById('academicYear').value;
+        const studentName = document.getElementById('studentName').value.toLowerCase();
+        const studentClass = document.getElementById('class').value;
+
+        // Lọc dữ liệu
+        const filteredData = data.filter(item => {
+            return (
+                (!year || item.year === year) &&
+                (!studentName || item.name.toLowerCase().includes(studentName)) &&
+                (!studentClass || item.class === studentClass)
+            );
+        });
+
+        // Hiển thị dữ liệu trong bảng
+        const tableBody = document.getElementById('scoreTable');
+        tableBody.innerHTML = ''; // Xóa nội dung cũ
+        if (filteredData.length === 0) {
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center text-gray-500 py-2">Không có dữ liệu phù hợp</td></tr>`;
+        } else {
+            filteredData.forEach((item, index) => {
+                const row = `
+                    <tr>
+                        <td class="border px-4 py-2">${index + 1}</td>
+                        <td class="border px-4 py-2">${item.name}</td>
+                        <td class="border px-4 py-2">${item.class}</td>
+                        <td class="border px-4 py-2">${item.tbhk1}</td>
+                        <td class="border px-4 py-2">${item.tbhk2}</td>
+                    </tr>
+                `;
+                tableBody.innerHTML += row;
+            });
+        }
+    });
+</script>
 {% endblock %}

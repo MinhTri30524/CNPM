@@ -1,4 +1,177 @@
 {% extends 'layout/base.html' %}
+
 {% block content %}
- <h1>Nhập điểm</h1>
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
+    <!-- Phần tiêu đề -->
+    <h1 class="text-xl font-bold text-gray-700 mb-6">Nhập điểm học sinh</h1>
+
+    <!-- Khung thông tin chính -->
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Form Nhập Điểm -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Nhập Điểm</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Tên học sinh -->
+                <div>
+                    <label for="studentName" class="block text-gray-700 font-bold mb-2">Tên học sinh:</label>
+                    <input type="text" id="studentName" placeholder="Nguyễn Văn A"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Học kỳ -->
+                <div>
+                    <label for="semester" class="block text-gray-700 font-bold mb-2">Học kỳ:</label>
+                    <select id="semester"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Chọn học kỳ</option>
+                        <option value="1">Học kỳ 1</option>
+                        <option value="2">Học kỳ 2</option>
+                    </select>
+                </div>
+
+                <!-- Năm học -->
+                <div>
+                    <label for="academicYear" class="block text-gray-700 font-bold mb-2">Năm học:</label>
+                    <select id="academicYear"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Chọn năm học</option>
+                        <option value="2023-2024">2023-2024</option>
+                        <option value="2024-2025">2024-2025</option>
+                    </select>
+                </div>
+
+                <!-- Lớp -->
+                <div>
+                    <label for="class" class="block text-gray-700 font-bold mb-2">Lớp:</label>
+                    <select id="class"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Chọn lớp</option>
+                        <option value="10A">10A</option>
+                        <option value="10B">10B</option>
+                    </select>
+                </div>
+
+                <!-- Môn học -->
+                <div>
+                    <label for="subject" class="block text-gray-700 font-bold mb-2">Môn học:</label>
+                    <select id="subject"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Chọn môn</option>
+                        <option value="Math">Toán</option>
+                        <option value="Physics">Vật Lý</option>
+                    </select>
+                </div>
+
+                <!-- Số cột điểm 15 phút -->
+                <div>
+                    <label for="col15p" class="block text-gray-700 font-bold mb-2">Số cột điểm 15 phút:</label>
+                    <select id="col15p"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+
+                <!-- Container điểm 15 phút -->
+                <div id="col15pInputs" class="col-span-2"></div>
+
+                <!-- Số cột điểm 1 tiết -->
+                <div>
+                    <label for="col45p" class="block text-gray-700 font-bold mb-2">Số cột điểm 1 tiết:</label>
+                    <select id="col45p"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+
+                <!-- Container điểm 1 tiết -->
+                <div id="col45pInputs" class="col-span-2"></div>
+
+                <!-- Điểm cuối kỳ -->
+                <div>
+                    <label for="finalScore" class="block text-gray-700 font-bold mb-2">Điểm cuối kỳ:</label>
+                    <input type="number" id="finalScore" placeholder="Nhập điểm cuối kỳ"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                </div>
+
+                <!-- Nút lưu -->
+                <div class="col-span-2">
+                    <button id="saveBtn"
+                        class="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Lưu điểm
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng Điểm -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Bảng Điểm</h2>
+            <table class="min-w-full border border-gray-300 text-gray-700">
+                <thead>
+                    <tr class="bg-gray-100">
+                        <th class="border px-4 py-2">Tên học sinh</th>
+                        <th class="border px-4 py-2">Điểm 15 phút</th>
+                        <th class="border px-4 py-2">Điểm 1 tiết</th>
+                        <th class="border px-4 py-2">Cuối kỳ</th>
+                    </tr>
+                </thead>
+                <tbody id="scoreTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Hiển thị input động cho điểm 15 phút
+    document.getElementById('col15p').addEventListener('change', (e) => {
+        const col15pCount = parseInt(e.target.value);
+        const col15pInputs = document.getElementById('col15pInputs');
+        col15pInputs.innerHTML = '';
+        for (let i = 1; i <= col15pCount; i++) {
+            col15pInputs.innerHTML += `<input type="number" placeholder="Điểm 15 phút ${i}" class="w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />`;
+        }
+    });
+
+    // Hiển thị input động cho điểm 1 tiết
+    document.getElementById('col45p').addEventListener('change', (e) => {
+        const col45pCount = parseInt(e.target.value);
+        const col45pInputs = document.getElementById('col45pInputs');
+        col45pInputs.innerHTML = '';
+        for (let i = 1; i <= col45pCount; i++) {
+            col45pInputs.innerHTML += `<input type="number" placeholder="Điểm 1 tiết ${i}" class="w-full px-4 py-2 mb-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />`;
+        }
+    });
+
+    // Lưu và hiển thị điểm
+    document.getElementById('saveBtn').addEventListener('click', () => {
+        const studentName = document.getElementById('studentName').value;
+        const finalScore = document.getElementById('finalScore').value;
+
+        if (!studentName || !finalScore) {
+            alert('Vui lòng nhập đầy đủ thông tin!');
+            return;
+        }
+
+        const col15pScores = Array.from(document.querySelectorAll('#col15pInputs input')).map(input => input.value || '--').join(', ');
+        const col45pScores = Array.from(document.querySelectorAll('#col45pInputs input')).map(input => input.value || '--').join(', ');
+
+        const table = document.getElementById('scoreTable');
+        const row = table.insertRow();
+        row.innerHTML = `
+            <td class="border px-4 py-2">${studentName}</td>
+            <td class="border px-4 py-2">${col15pScores}</td>
+            <td class="border px-4 py-2">${col45pScores}</td>
+            <td class="border px-4 py-2">${finalScore}</td>
+        `;
+    });
+</script>
+
+
+
 {% endblock %}

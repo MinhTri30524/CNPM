@@ -1,4 +1,129 @@
 {% extends 'layout/base.html' %}
 {% block content %}
- <h1>Thay Đổi Quy Định</h1>
+<!-- Form -->
+<div class="bg-blue-100 m-[45px] p-6 rounded-lg shadow-lg">
+    <div class="grid grid-cols-2 gap-4">
+        <!-- Khối học -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="khoi-hoc">Khối học</label>
+            <select id="khoi-hoc"
+                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                <option>Khối 10</option>
+                <option>Khối 11</option>
+                <option>Khối 12</option>
+            </select>
+        </div>
+        <!-- Năm học -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="nam-hoc">Năm học</label>
+            <select id="nam-hoc" class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                <option>2023-2024</option>
+                <option>2024-2025</option>
+            </select>
+        </div>
+        <!-- Mã lớp -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="ma-lop">Mã lớp</label>
+            <input type="text" id="ma-lop" value="101201"
+                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+        </div>
+        <!-- Học kỳ -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="hoc-ky">Học kỳ</label>
+            <select id="hoc-ky" class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+                <option>Học Kỳ 1</option>
+                <option>Học Kỳ 2</option>
+                <option>Học Kỳ 3</option>
+            </select>
+        </div>
+        <!-- Tên lớp -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="ten-lop">Tên lớp</label>
+            <input type="text" id="ten-lop" value="10.B1"
+                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+        </div>
+        <!-- Số học sinh -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="so-hoc-sinh">Số học sinh</label>
+            <input type="text" id="so-hoc-sinh" value="0"
+                class="w-full p-2 border-yellow-300 bg-yellow-100 rounded-lg focus:ring-2 focus:ring-yellow-500 text-sm">
+        </div>
+        <!-- Ban học -->
+        <div>
+            <label class="block text-gray-700 font-semibold mb-2" for="ban-hoc">Giảng Viên</label>
+            <select id="giang_vien"
+                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
+            </select>
+        </div>
+    </div>
+
+    <!-- Nút Tạo và Hủy -->
+    <div class="flex space-x-4 mt-4">
+        <button
+            class="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
+            Tạo
+        </button>
+        <button
+            class="bg-gray-500 text-white p-3 rounded-lg w-full sm:w-auto hover:bg-gray-600 focus:ring-2 focus:ring-gray-500">
+            Hủy
+        </button>
+    </div>
+
+
+
+</div>
+
+<!-- Table -->
+<div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
+    <table class="w-full border-collapse border border-gray-200">
+        <thead>
+            <tr class="bg-blue-200 text-gray-700">
+                <th class="border border-gray-300 p-2">Mã lớp học</th>
+                <th class="border border-gray-300 p-2">Tên lớp học</th>
+                <th class="border border-gray-300 p-2">Học kỳ tạo lớp</th>
+                <th class="border border-gray-300 p-2">Năm học</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="text-center">
+                <td class="border border-gray-300 p-2">101201</td>
+                <td class="border border-gray-300 p-2">10.B1</td>
+                <td class="border border-gray-300 p-2">Học kỳ 1</td>
+                <td class="border border-gray-300 p-2">2012-2013</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+
+    Name_teacher = []
+    fetch('/api/get_teacher', {
+        method: "POST",
+        body: JSON.stringify({
+            "body": 1
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => res.json()).then(data => {
+        data = data.data
+        for (let i = 0; i < data.length; i++) {
+            Name_teacher.push({
+                "name": data[i].ho_ten,
+                "id": data[i].ma_nhan_vien
+            })
+        }
+    })
+    console.log(Name_teacher)
+
+    const selectElement = document.getElementById("giang_vien");
+    // Lặp qua mảng Name_teacher và tạo các <option>
+    Name_teacher.forEach(teacher => {
+        const option = document.createElement("option");
+        option.value = teacher.id; // Giá trị của option (id)
+        option.textContent = teacher.name; // Nội dung hiển thị cho option (name)
+        selectElement.appendChild(option); // Thêm option vào select
+    });
+
+</script>
 {% endblock %}

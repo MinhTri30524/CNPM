@@ -29,6 +29,12 @@
       <i class="fa-solid fa-box-open text-white"></i>
       <span class="ml-4 text-white">Thay Đổi Quy Định</span>
     </a>
+    {% if current_user.is_authenticated %} 
+    <a href="/logout" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
+      <i class="fas fa-sign-out text-white"></i>
+      <span class="ml-4 text-white">LOGOUT</span>
+    </a>
+    {% else %}
     <div class="px-4 pt-4 text-xs font-bold text-gray-500 text-white">Đăng Nhập Tài Khoản</div>
     <a href="/login" class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-200">
       <i class="fas fa-sign-out text-white"></i>
@@ -38,5 +44,6 @@
       <i class="fas fa-sign-in text-white"></i>
       <span class="ml-4 text-white">SIGN UP</span>
     </a>
+    {% endif %}
   </nav>
 </aside>

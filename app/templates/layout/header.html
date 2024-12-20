@@ -7,10 +7,13 @@
             <!-- Chấm đỏ -->
             <span class="absolute top-0 right-0 w-[8px] h-[8px] bg-red-500 rounded-full"></span>
         </div>
-        <p class="text-white">Chào Gia Bảo</p>
+        {% if current_user.is_authenticated %} 
+        <p class="text-white">{{ current_user.ho_ten}}</p>
+
         <img src="https://chuphinhthe.com/upload/product/8239-duong-4751.jpg" class="h-[50px] rounded-[50%]" alt="">
         <!-- <input type="text" placeholder="Search"
             class="px-4 py-2 border rounded-md focus:ring focus:ring-blue-200" />
         <button class="px-4 py-2 text-white bg-blue-500 rounded-md">Tìm Kiếm</button> -->
+        {% endif %}
     </div>
 </header>

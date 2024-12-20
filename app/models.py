@@ -176,10 +176,12 @@ class Diem(db.Model):
     __tablename__ = 'diem'
     id = Column(Integer, primary_key=True)
     loai_diem = Column(Enum(LoaiDiemEnum), nullable=False)
+    so_cot_diem = Column(Integer, nullable=False)
     diem = Column(Float, nullable=False)
     hoc_ky_id = Column(Integer, ForeignKey('hoc_ky.id'))
     mon_hoc_id = Column(Integer, ForeignKey('mon_hoc.ma_mon'))
     hoc_sinh_id = Column(Integer, ForeignKey('hoc_sinh.ma_hoc_sinh'))
+
 
 # Lớp Học kỳ
 class HocKy(db.Model):

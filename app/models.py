@@ -110,9 +110,9 @@ class HocSinh(db.Model):
 	@staticmethod
 	def get_students_by_year(semester_name, year):
 		students = db.session.query(HocSinh).join(Hoc, HocSinh.ma_hoc_sinh == Hoc.hoc_sinh_id).join(
-			HocKy,
-			Hoc.hoc_ky_id == HocKy.id).filter(
+			Diem, Diem.hoc_id == Hoc.ma_hoc).join(HocKy, Diem.hoc_ky_id == HocKy.id).filter(
 			HocKy.ten == semester_name, HocKy.nam_hoc == year).all()
+
 		result = [
 			{
 				"ma_hoc_sinh": student.ma_hoc_sinh,

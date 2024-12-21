@@ -43,9 +43,7 @@ class User(db.Model, UserMixin):
 class QuanTri(User):
 	__tablename__ = 'quan_tri'
 	ma_nhan_vien = Column(Integer, ForeignKey('user.ma_nhan_vien'), primary_key=True)
-
-
-# Thêm các thuộc tính/method riêng cho QuanTri nếu cần
+	# Thêm các thuộc tính/method riêng cho QuanTri nếu cần
 
 
 # Lớp Nhân viên kế thừa từ User
@@ -133,16 +131,6 @@ class GiangVien(User):
 	# Thiết lập 1-1 với LopHoc
 	lop_hoc = relationship("LopHoc", back_populates="giang_vien", uselist=False)
 
-	def to_dict(self):
-		# Trả về thông tin kết hợp giữa GiangVien và User
-		user_info = User.query.filter_by(ma_nhan_vien=self.ma_nhan_vien).first()
-		return {
-			"ma_nhan_vien": self.ma_nhan_vien,
-			"ho_ten": user_info.ho_ten,
-			"username": user_info.username,
-			"avatar": user_info.avatar,
-			"user_role": user_info.user_role.name,  # Nếu UserRole là Enum
-		}
 
 
 # Lớp Lớp học
@@ -161,24 +149,6 @@ class LopHoc(db.Model):
 						   unique=True)
 	giang_vien = relationship("GiangVien", back_populates="lop_hoc", uselist=False, lazy=True)
 
-	def to_dict(self):
-		return {
-			'id': self.ma_lop,
-			'ten_lop': self.ten,
-		}
-
-	@staticmethod
-	def get_all_class():
-		classes = db.session.query(LopHoc).all()
-		result = [
-			{
-				"ma_lop": _class.ma_lop,
-				"ten_lop": _class.ten,
-				# Các cột khác nếu có...
-			}
-			for _class in classes
-		]
-		return result
 
 
 # Lớp Khối

@@ -18,21 +18,41 @@ def login_process():
 	if request.method.__eq__('POST'):
 		username = request.form.get('username')
 		password = request.form.get('password')
-		print("11111111111111111==>",username)
-		print("2222222222222222==>",password)
 		u = dao.auth_user(username=username, password=password)
-		print("iuuuuuuu===>",u)
 		if u:
 			login_user(u)
 			return redirect('/')
-
 	return render_template('login.html')
+
+# Sử lý đăng xuất
+@app.route("/logout")
+def logout_process():
+	logout_user()
+	return redirect('/login')
+
+# load trang đăng ký
+@app.route('/register', methods=['get', 'post'])
+def register_process():
+	err_msg = ''
+	if request.method.__eq__('POST'):
+		password = request.form.get('password')
+		confirm = request.form.get('confirm')
+		if password.__eq__(confirm):
+			data = request.form.copy()
+			del data['confirm']
+			avatar = request.files.get('avatar')
+			dao.add_user(avatar=avatar, **data)
+			return redirect('/login')
+		else:
+			err_msg = 'Mật khẩu không khớp!'
+	return render_template('register.html', err_msg=err_msg)
+
 
 #lay cac giang vien ra
 @app.route("/api/get_teacher", methods=["POST"])
 def get_teacher():
 	teacher = dao.get_teacher()
-	return jsonify({"message": "Student added successfully", "data": teacher})
+	return jsonify({"message": "teach_successfully", "data": teacher})
 
 
 #lay tra ca hoc sinh chua co lop ra ra
@@ -45,12 +65,9 @@ def get_students_no_class():
 @app.route("/api/get_students_in_class", methods=["POST"])
 def get_students_in_class():
 	data =request.get_json()
-	# {
-	# 	"malop:" 1,
-	# 	"tenLop":2
-	# }
 	student_in_class = dao.get_stdents_in_class(data["malop"])
 	return jsonify({"message":"successfully","data":student_in_class})
+
 
 #api tra ta ca lop hoc da duoc tao ra
 @app.route("/api/get_class", methods=["POST"])
@@ -59,21 +76,48 @@ def get_class():
 	return jsonify({"message":"successfully","data":class_id})
 
 
-#them hoc sinh vao database
+#them 1 hoặc danh sách hoc sinh vao database
 @app.route("/api/add_Student", methods=['POST'])
 def add_student():
     # Lấy dữ liệu từ request
 	data = request.get_json()
-	data = data["student"]
-	print("data====>",data["name"])
-	dao.add_student(data["name"],data["dob"],data["phone"],data["gender"],data["address"],data["email"])
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for student__ in data:
+			dao.add_student(student__["name"],student__["brithday"],student__["phone"],student__["sex"],student__["address"],student__["mail"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
+	
 
-	# Kiểm tra dữ liệu hợp lệ
-	if not data:
-		return jsonify({"error": "No data provided"}), 400
-	# Trả về phản hồi thành công
-	return jsonify({"message": "Student added successfully", "data": data}), 201
+@app.route("/api/add_class", methods=['POST'])
+def add_class():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		
+		data = data["data"]
+		for class__ in data:
+			print(class__["teach_id"])
+			dao.add_class_Student(class__["malop"],class__["member"],class__["name"],class__["block_id"],class__["teach_id"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
 
+@app.route("/api/add_hoc", methods=['POST'])
+def add_hoc():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for hoc__ in data:
+			dao.add_hoc(hoc__["class_id"],hoc__["student_id"])
+		return jsonify({"message": "add_hoc added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
 
 # load trang admin
 # @app.route("/login-admin", methods=['post'])
@@ -88,34 +132,7 @@ def add_student():
 # 	return redirect('/admin')
 
 
-# Sử lý đăng xuất
-@app.route("/logout")
-def logout_process():
-	logout_user()
-	return redirect('/login')
 
-
-# load trang đăng ký
-@app.route('/register', methods=['get', 'post'])
-def register_process():
-	err_msg = ''
-	if request.method.__eq__('POST'):
-		password = request.form.get('password')
-		confirm = request.form.get('confirm')
-
-		if password.__eq__(confirm):
-			data = request.form.copy()
-			del data['confirm']
-			print("data======>",data)
-
-			avatar = request.files.get('avatar')
-			dao.add_user(avatar=avatar, **data)
-
-			return redirect('/login')
-		else:
-			err_msg = 'Mật khẩu không khớp!'
-
-	return render_template('register.html', err_msg=err_msg)
 
 
 

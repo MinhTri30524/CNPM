@@ -2,7 +2,7 @@ import enum
 from enum import Enum as RoleEnum
 
 from flask_login import UserMixin
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, DateTime
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum, DateTime, alias
 from sqlalchemy.orm import relationship
 
 from app import db, app
@@ -127,7 +127,6 @@ class HocSinh(db.Model):
 		return result
 
 
-# Lớp Giảng viên kế thừa từ User
 class GiangVien(User):
 	__tablename__ = 'giang_vien'
 	ma_nhan_vien = Column(Integer, ForeignKey('user.ma_nhan_vien'), primary_key=True)

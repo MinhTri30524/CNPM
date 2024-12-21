@@ -122,7 +122,7 @@ def get_average_score_by_year(year):
 	average_scores = db.session.query(
 		HocSinh.ma_hoc_sinh,
 		HocSinh.ho_ten,
-		HocKy.ten.label('ten_hoc_ky'),
+		HocKy.ten,
 		db.func.avg(Diem.diem).label('average_score')
 	).join(Hoc, Hoc.hoc_sinh_id == HocSinh.ma_hoc_sinh).join(
 		LopHoc, Hoc.lop_hoc_id == LopHoc.ma_lop).join(

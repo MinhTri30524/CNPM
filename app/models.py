@@ -107,6 +107,25 @@ class HocSinh(db.Model):
 		]
 		return result
 
+	@staticmethod
+	def get_students_by_year(semester_name, year):
+		students = db.session.query(HocSinh).join(Hoc, HocSinh.ma_hoc_sinh == Hoc.hoc_sinh_id).join(
+			HocKy,
+			Hoc.hoc_ky_id == HocKy.id).filter(
+			HocKy.ten == semester_name, HocKy.nam_hoc == year).all()
+		result = [
+			{
+				"ma_hoc_sinh": student.ma_hoc_sinh,
+				"ho_ten": student.ho_ten,
+				"ngay_sinh": student.ngay_sinh.strftime("%Y-%m-%d") if student.ngay_sinh else None,
+				"gioi_tinh": student.gioi_tinh,
+				"dia_chi": student.dia_chi,
+				"mail": student.mail,
+			}
+			for student in students
+		]
+		return result
+
 
 # Lớp Giảng viên kế thừa từ User
 class GiangVien(User):
@@ -141,7 +160,7 @@ class LopHoc(db.Model):
 	# Thiết lập mối quan hệ 1-1 với GiangVien
 	giang_vien_id = Column(Integer, ForeignKey('giang_vien.ma_nhan_vien'),
 						   unique=True)
-	giang_vien = relationship("GiangVien", back_populates="lop_hoc", uselist=False,lazy=True)
+	giang_vien = relationship("GiangVien", back_populates="lop_hoc", uselist=False, lazy=True)
 
 	def to_dict(self):
 		return {
@@ -177,9 +196,9 @@ class Hoc(db.Model):
 	ma_hoc = Column(Integer, primary_key=True, autoincrement=True)
 	lop_hoc_id = Column(Integer, ForeignKey('lop_hoc.ma_lop'))
 	hoc_sinh_id = Column(Integer, ForeignKey('hoc_sinh.ma_hoc_sinh'))
-	# diem_id = Column(Integer, ForeignKey('diem.id'))
+	mon_hoc_id = Column(Integer, ForeignKey('mon_hoc.ma_mon'))
+	diems = relationship('Diem', backref='hoc', lazy=True)
 
-	diem = relationship('Diem', back_populates='hoc', uselist=False, lazy=True)
 
 # Lớp Môn học
 class MonHoc(db.Model):
@@ -187,7 +206,7 @@ class MonHoc(db.Model):
 	ma_mon = Column(Integer, primary_key=True)
 	ten = Column(String(100), nullable=False)
 	so_tiet = Column(Integer, nullable=False)
-	bang_diems = relationship('Diem', backref='mon_hoc', lazy=True)
+	hocs = relationship('Hoc', backref='mon_hoc', lazy=True)
 
 	def __str__(self):
 		return self.ten
@@ -196,16 +215,11 @@ class MonHoc(db.Model):
 # Lớp Điểm
 class Diem(db.Model):
 	__tablename__ = 'diem'
-	id = Column(Integer, primary_key=True)
+	id = Column(Integer, primary_key=True, autoincrement=True)
 	loai_diem = Column(Enum(LoaiDiemEnum), nullable=False)
-	so_cot_diem = Column(Integer, nullable=False)
 	diem = Column(Float, nullable=False)
 	hoc_ky_id = Column(Integer, ForeignKey('hoc_ky.id'))
-	mon_hoc_id = Column(Integer, ForeignKey('mon_hoc.ma_mon'))
-	# hoc = relationship('Hoc', back_populates='diem', uselist=False)
-
-	hoc_id = Column(Integer, ForeignKey('hoc.ma_hoc'), unique=True)
-	hoc = relationship('Hoc', back_populates='diem', uselist=False, lazy=True)
+	hoc_id = Column(Integer, ForeignKey('hoc.ma_hoc'))
 
 
 # Lớp Học kỳ
@@ -213,8 +227,7 @@ class HocKy(db.Model):
 	__tablename__ = 'hoc_ky'
 	id = Column(Integer, primary_key=True)
 	ten = Column(String(100), nullable=False)
-	nam_hoc = Column(DateTime, nullable=False)
-	hocs = relationship('Hoc', backref='hoc_ky', lazy=True)
+	nam_hoc = Column(String(20), nullable=False)
 	diems = relationship('Diem', backref='hoc_ky', lazy=True)
 
 	def __str__(self):

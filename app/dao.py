@@ -64,3 +64,7 @@ def get_class():
 
 def get_user_by_id(ma_nhan_vien):
 	return User.query.get(ma_nhan_vien)
+
+def get_students_by_year(semester_name, year):
+	students = HocSinh.get_students_in_class(semester_name, year)
+	return students

@@ -27,7 +27,10 @@
                 </div>
                 <div class="field">
                     <label for="gender1">Giới Tính</label>
-                    <input id="gender1" type="text" class="border rounded p-2 w-full" placeholder="Nhập giới tính" />
+                    <select id="gender1" class="border rounded p-2 w-full">
+                        <option value="male">Nam</option>
+                        <option value="female">Nữ</option>
+                    </select>
                 </div>
                 <div class="field">
                     <label for="address1">Địa Chỉ</label>
@@ -58,26 +61,9 @@
             <p id="detailsContent" class="text-gray-700"></p>
         </div>
     </div>
-
-
-    <!-- Các tiện ích của user đó -->
-    <!-- <div class="grid grid-cols-3 gap-4 mt-8 w-full max-w-4xl">
-        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
-            <i class="fa-solid fa-info-circle text-2xl mb-2"></i>
-            Thông tin liên lạc
-        </button>
-        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
-            <i class="fa-solid fa-bullhorn text-2xl mb-2"></i>
-            Diễn đàn
-        </button>
-        <button class="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-gray-700">
-            <i class="fa-solid fa-envelope text-2xl mb-2"></i>
-            Nhắn tin
-        </button>
-    </div> -->
 </div>
 
-<script>
+<!-- <script>
     // Lấy các phần tử từ DOM
     const addStudentBtn = document.getElementById('addStudentBtn');
     const resetBtn = document.getElementById('resetBtn');
@@ -115,6 +101,17 @@
         }
     });
 
+    fetch('/api/add_Student', {
+            method: "POST",
+            body: JSON.stringify({
+                student
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(res => res.json()).then(data => {
+            alert(data)
+        })
     // Hiển thị danh sách học sinh
     function renderStudentList() {
         studentList.innerHTML = ''; // Xóa danh sách cũ
@@ -152,5 +149,5 @@
         emailInput.value = '';
     }
 
-</script>
+</script> -->
 {% endblock %}

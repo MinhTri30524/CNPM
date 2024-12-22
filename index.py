@@ -115,11 +115,26 @@ def add_class():
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for class__ in data:
-			print(class__["teach_id"])
-			dao.add_class_Student(class__["malop"],class__["member"],class__["name"],class__["block_id"],class__["teach_id"])
+			print(class__["giang_vien_id"])
+			dao.add_class_student(class__["ma_lop"],class__["so_luong"],class__["ten"],class__["khoi_id"],class__["giang_vien_id"])
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400
+
+@app.route("/api/remote_class", methods=['POST'])
+def remote_class():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for class__ in data:
+			print("data======>",data)
+			dao.remote_class(class__["ma_lop"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
+
 
 @app.route("/api/add_hoc", methods=['POST'])
 def add_hoc():
@@ -190,7 +205,10 @@ def Reporting_statistics():
 # Load trang thay đổi quy định
 @app.route('/Change_rules')
 def Change_rules():
-	return render_template('Change_rules.html')
+	teacher = dao.get_teacher()
+	khoi = dao.get_khoi()
+	class__ = dao.get_class()
+	return render_template('Change_rules.html',teacher = teacher, khoi = khoi, class__ = class__)
 
 
 # Xử lý user từ cơ sở dữ liệu

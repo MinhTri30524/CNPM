@@ -1,129 +1,306 @@
 {% extends 'layout/base.html' %}
 {% block content %}
 <!-- Form -->
-<div class="bg-blue-100 m-[45px] p-6 rounded-lg shadow-lg">
-    <div class="grid grid-cols-2 gap-4">
-        <!-- Khối học -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="khoi-hoc">Khối học</label>
-            <select id="khoi-hoc"
-                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                <option>Khối 10</option>
-                <option>Khối 11</option>
-                <option>Khối 12</option>
-            </select>
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[5px]">
+    <!-- Phần tiêu đề -->
+    <h1 class="text-[40px] font-bold text-gray-700 mb-6">
+        Tạo Lớp Học Và Số Lượng Thành Viên
+    </h1>
+    <!-- Khung thông tin chính -->
+    <div class="grid">
+        <!-- Form Thêm Học Sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6 mb-[20px] mx-auto">
+            <h2 class="font-bold text-gray-700 mb-4">Thông tin Lớp Học</h2>
+            <div class="grid grid-cols-3 gap-2">
+                <div class="field">
+                    <label for="ma_lop">Mã Lớp</label>
+                    <input id="ma_lop" type="text" class="border rounded p-2 w-full" placeholder="Nhập mã lớp" />
+                </div>
+                <div class="field col-span-2">
+                    <label for="ten_lop">Tên Lớp</label>
+                    <input id="ten_lop" type="text" class="border rounded p-2 w-full" placeholder="Nhập tên lớp" />
+                </div>
+                <div class="field">
+                    <label for="hoc_ky">Học Kỳ</label>
+                    <select id="hoc_ky" class="border rounded p-2 w-full">
+                        <option value="" disabled selected>Chọn Học Kỳ</option>
+                        <option value="Học Kỳ 1">Học Kỳ 1</option>
+                        <option value="Học Kỳ 2">Học Kỳ 2</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="nam_hoc">Năm Học</label>
+                    <select id="nam_hoc" class="border rounded p-2 w-full">
+                        <option value="" disabled selected>Chọn Năm Học</option>
+                        <option value="2023">2024</option>
+                        <option value="2024">2025</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="khoi">Khối</label>
+                    <select id="khoi" class="border rounded p-2 w-full">
+                        <option value="" disabled selected>Chọn khối</option>
+                        {% for khoi in khoi %}
+                        <option value="{{khoi.id}}">Khối {{khoi.ten}}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="field col-span-2">
+                    <label for="so_luong">Số Lượng Thành Viên</label>
+                    <input id="so_luong" type="number" class="border rounded p-2 w-full"
+                        placeholder="Nhập số lượng thành viên" />
+                </div>
+                <div class="field">
+                    <label for="giao_vien">Giáo Viên Chủ Nhiệm</label>
+                    <select id="giao_vien" class="border rounded p-2 w-full">
+                        <option value="" disabled selected>Chọn giáo viên</option>
+                        {% for teacher in teacher %}
+                        <option value="{{ teacher.ma_nhan_vien }}">{{ teacher.ho_ten}} - {{ teacher.ma_nhan_vien }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="mt-7 flex gap-2">
+                <button id="addClassBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Lớp</button>
+                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
+            </div>
         </div>
-        <!-- Năm học -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="nam-hoc">Năm học</label>
-            <select id="nam-hoc" class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                <option>2023-2024</option>
-                <option>2024-2025</option>
-            </select>
-        </div>
-        <!-- Mã lớp -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="ma-lop">Mã lớp</label>
-            <input type="text" id="ma-lop" value="101201"
-                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-        </div>
-        <!-- Học kỳ -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="hoc-ky">Học kỳ</label>
-            <select id="hoc-ky" class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-                <option>Học Kỳ 1</option>
-                <option>Học Kỳ 2</option>
-                <option>Học Kỳ 3</option>
-            </select>
-        </div>
-        <!-- Tên lớp -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="ten-lop">Tên lớp</label>
-            <input type="text" id="ten-lop" value="10.B1"
-                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-        </div>
-        <!-- Số học sinh -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="so-hoc-sinh">Số học sinh</label>
-            <input type="text" id="so-hoc-sinh" value="0"
-                class="w-full p-2 border-yellow-300 bg-yellow-100 rounded-lg focus:ring-2 focus:ring-yellow-500 text-sm">
-        </div>
-        <!-- Ban học -->
-        <div>
-            <label class="block text-gray-700 font-semibold mb-2" for="ban-hoc">Giảng Viên</label>
-            <select id="giang_vien"
-                class="w-full p-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm">
-            </select>
+
+        <!-- Danh Sách Học Sinh -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Danh Sách Lớp Học</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300 text-gray-700">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">Mã Lớp</th>
+                            <th class="border px-4 py-2">Tên Lớp</th>
+                            <th class="border px-4 py-2">Số Lượng Thành Viên</th>
+                            <th class="border px-4 py-2">khối</th>
+                            <th class="border px-4 py-2">Giáo Viên Chủ Nhiệm</th>
+                            <th class="border px-4 py-2">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="students-no-class" id="class-list">
+                        <tr>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2">
+                                <button class="add-to-class-btn bg-blue-500 text-white px-2 py-1 rounded" data-id="">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-
-    <!-- Nút Tạo và Hủy -->
-    <div class="flex space-x-4 mt-4">
-        <button
-            class="bg-blue-500 text-white p-3 rounded-lg w-full sm:w-auto hover:bg-blue-600 focus:ring-2 focus:ring-blue-500">
-            Tạo
-        </button>
-        <button
-            class="bg-gray-500 text-white p-3 rounded-lg w-full sm:w-auto hover:bg-gray-600 focus:ring-2 focus:ring-gray-500">
-            Hủy
-        </button>
-    </div>
-
-
-
-</div>
-
-<!-- Table -->
-<div class="mt-6 bg-white p-6 rounded-lg shadow-lg">
-    <table class="w-full border-collapse border border-gray-200">
-        <thead>
-            <tr class="bg-blue-200 text-gray-700">
-                <th class="border border-gray-300 p-2">Mã lớp học</th>
-                <th class="border border-gray-300 p-2">Tên lớp học</th>
-                <th class="border border-gray-300 p-2">Học kỳ tạo lớp</th>
-                <th class="border border-gray-300 p-2">Năm học</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="text-center">
-                <td class="border border-gray-300 p-2">101201</td>
-                <td class="border border-gray-300 p-2">10.B1</td>
-                <td class="border border-gray-300 p-2">Học kỳ 1</td>
-                <td class="border border-gray-300 p-2">2012-2013</td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 <script>
+    // Thu thập dữ liệu từ các trường trong form
+    arryclass__ = {{ class__ | tojson }}
+    console.log(arryclass__)
+    Addclass__ = []
 
-    Name_teacher = []
-    fetch('/api/get_teacher', {
-        method: "POST",
-        body: JSON.stringify({
-            "body": 1
-        }),
-        headers: {
-            'Content-Type': 'application/json'
+    document.getElementById("addClassBtn").addEventListener("click", () => {
+        const dataclass__ = {
+            ma_lop: document.getElementById("ma_lop").value.trim(),
+            ten: document.getElementById("ten_lop").value.trim(),
+            hoc_ky: document.getElementById("hoc_ky").value,
+            nam_hoc: document.getElementById("nam_hoc").value,
+            khoi_id: document.getElementById("khoi").value,
+            so_luong: parseInt(document.getElementById("so_luong").value.trim()) || 0,
+            giang_vien_id: document.getElementById("giao_vien").value
+        };
+     
+        //Xử lý một xíu giao diện
+        const exists = arryclass__.some(class_ => class_.ma_lop === Number (dataclass__.ma_lop));
+        console.log("exists====>",exists)
+        if (!exists) {
+            arryclass__.push(dataclass__);
+            console.log("Lớp đã được thêm:", dataclass__);
+        } else {
+            // Nếu đã tồn tại, cập nhật thông tin
+            for (let i = 0; i < arryclass__.length; i++) {
+                if (arryclass__[i].ma_lop === Number (dataclass__.ma_lop)) {
+                    arryclass__[i] = dataclass__;  // Cập nhật lớp
+                    break; // Thoát khỏi vòng lặp sau khi cập nhật
+                }
+            }
         }
-    }).then(res => res.json()).then(data => {
-        data = data.data
-        for (let i = 0; i < data.length; i++) {
-            Name_teacher.push({
-                "name": data[i].ho_ten,
-                "id": data[i].ma_nhan_vien
-            })
-        }
-    })
-    console.log(Name_teacher)
-
-    const selectElement = document.getElementById("giang_vien");
-    // Lặp qua mảng Name_teacher và tạo các <option>
-    Name_teacher.forEach(teacher => {
-        const option = document.createElement("option");
-        option.value = teacher.id; // Giá trị của option (id)
-        option.textContent = teacher.name; // Nội dung hiển thị cho option (name)
-        selectElement.appendChild(option); // Thêm option vào select
+        Addclass__.push(dataclass__);
+        Addclass_database()
+        // Log mảng học sinh để kiểm tra
+        console.log(arryclass__);
+        // Xử lý sau khi thêm học sinh (có thể hiển thị thông báo, hoặc làm gì đó khác)
+        updateclassList();
+        alert("Học sinh đã được thêm vào danh sách.");
+        document.getElementById('ma_lop').value = '';
+        document.getElementById('ten_lop').value = '';
+        document.getElementById('hoc_ky').value = '';
+        document.getElementById('nam_hoc').value = '';
+        document.getElementById('khoi').value = ''; // Đặt lại giá trị mặc định
+        document.getElementById('so_luong').value = '';
+        document.getElementById('giao_vien').value = '';
+        updateclassList()
     });
 
+    function Addclass_database() {
+
+        const dataToSend = {
+            key: "save_class",
+            data: Addclass__
+        };
+        fetch('/api/add_class', {
+            method: "POST",
+            body: JSON.stringify(dataToSend), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Phản hồi từ server: " + JSON.stringify(data));
+                // Xử lý kết quả trả về từ server (có thể reset mảng hoặc cập nhật giao diện)
+                arryAdd = []; // Reset mảng sau khi lưu thành công
+            })
+            .catch(error => {
+                console.error("Lỗi xảy ra:", error);
+                alert("Có lỗi xảy ra khi gửi dữ liệu.");
+            });
+
+    }
+
+
+    function updateclassList() {
+        const tbody = document.getElementById('class-list');
+        tbody.innerHTML = ''; // Xóa tất cả các dòng hiện tại trong tbody
+
+        arryclass__.forEach(class__ => {
+            // Tạo một dòng mới cho mỗi học sinh
+            const row = document.createElement('tr');
+
+            // Tạo các ô dữ liệu trong dòng
+            row.innerHTML = `
+            <td class="border px-4 py-2">${class__.ma_lop}</td>
+            <td class="border px-4 py-2">${class__.ten}</td>
+            <td class="border px-4 py-2">${class__.so_luong}</td>
+            <td class="border px-4 py-2">${class__.khoi_id}</td>
+            <td class="border px-4 py-2">${class__.giang_vien_id}</td>
+            <td class="border px-4 py-2">
+                <div class="flex space-x-2">
+                    <!-- Nút cây bút chì -->
+                    <button class="edit-btn bg-blue-500 text-white px-2 py-1 rounded flex items-center justify-center"
+                        data-id="${class__.ma_lop}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <!-- Nút thùng rác -->
+                    <button class="delete-btn bg-blue-500 text-white px-2 py-1 rounded flex items-center justify-center"
+                        data-id="${class__.ma_lop}">
+                        <i class="fas fa-trash text-red-500"></i>
+                    </button>
+                </div>
+            </td>`;
+
+            tbody.appendChild(row); // Thêm dòng vào bảng
+        });
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Lấy giá trị data-id từ nút được click
+                const classId =  Number (button.getAttribute('data-id'));
+                // alert(classId)
+                removeClass(classId);
+            });
+        });
+
+        const editButtons = document.querySelectorAll('.edit-btn');
+        // Lặp qua từng nút và thêm sự kiện click
+        editButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const classId = button.getAttribute('data-id');
+                alert(classId)
+                fillStudentForm(classId); // Gọi hàm fillStudentForm thay vì alert hoặc remove
+            });
+        });
+
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const resetBtn = document.getElementById('resetBtn');
+        resetBtn.addEventListener('click', () => {
+            document.getElementById('ma_lop').value = '';
+            document.getElementById('ten_lop').value = '';
+            document.getElementById('hoc_ky').value = '';
+            document.getElementById('nam_hoc').value = '';
+            document.getElementById('khoi').value = ''; // Đặt lại giá trị mặc định
+            document.getElementById('so_luong').value = '';
+            document.getElementById('giao_vien').value = '';
+        });
+    });
+
+
+    // Hàm điền thông tin học sinh vào form
+    function fillStudentForm(classId) {
+        arryclass__.forEach(class__ => {
+            if (String(class__.ma_lop) === classId) {
+                document.getElementById('ma_lop').value = class__.ma_lop;
+                document.getElementById('ten_lop').value = class__.ten;
+                document.getElementById('hoc_ky').value = class__.hoc_ky;
+                document.getElementById('nam_hoc').value = class__.nam_hoc;
+                document.getElementById('khoi').value = class__.khoi_id;
+                document.getElementById('so_luong').value = class__.so_luong;
+                document.getElementById('giao_vien').value = class__.giang_vien_id;
+            }
+        });
+    }
+
+
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Lấy giá trị data-id từ nút được click
+            const studentId = button.getAttribute('data-id');
+            removeClass(studentId);
+        });
+    });
+
+    function removeClass(classId) {
+        // Tìm học sinh trong mảng studentsArray dựa trên studentId
+        const arryIndex_ = arryclass__.findIndex(class__ => class__.ma_lop === classId);
+        if (arryIndex_ !== -1) {
+            // Xóa học sinh khỏi mảng
+            arryclass__.splice(arryIndex_, 1);
+            alert('Học sinh đã được xóa khỏi mảng.');
+        }
+        fetch('/api/remote_class', {
+            method: "POST",
+            body: JSON.stringify({
+                "key": "remote",
+                "data": [
+                    {
+                        "ma_lop": classId
+                    }
+                ]
+            }), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        })
+        // Sau khi xóa, gọi hàm updateStudentList() để làm mới giao diện
+        updateclassList();
+    }
+    updateclassList()
 </script>
 {% endblock %}

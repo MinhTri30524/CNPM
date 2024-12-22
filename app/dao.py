@@ -59,6 +59,7 @@ def add_student(ma_hoc_sinh,ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
         return "Học sinh đã được thêm mới."
 
 
+
 # tạo một lớp học mới
 def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
     existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
@@ -138,7 +139,6 @@ def get_class():
 				"ten": _class.ten,
 				"khoi_id": _class.khoi_id,
 				"giang_vien_id":_class.giang_vien_id
-				# Các cột khác nếu có...
 			}
 			for _class in class_id
 		]

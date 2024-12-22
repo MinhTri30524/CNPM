@@ -33,14 +33,14 @@
                     <tbody class="students-no-class">
                         {% for student in students %}
                         <tr>
-                            <td class="border px-4 py-2">{{ loop.index }}</td>
-                            <td class="border px-4 py-2">{{ student.name }}</td>
-                            <td class="border px-4 py-2">{{ student.gender }}</td>
-                            <td class="border px-4 py-2">{{ student.year_of_birth }}</td>
-                            <td class="border px-4 py-2">{{ student.address }}</td>
+                            <td class="border px-4 py-2">{{ student.ma_hoc_sinh }}</td>
+                            <td class="border px-4 py-2">{{ student.ho_ten }}</td>
+                            <td class="border px-4 py-2">{{ student.gioi_tinh }}</td>
+                            <td class="border px-4 py-2">{{ student.ngay_sinh }}</td>
+                            <td class="border px-4 py-2">{{ student.dia_chi }}</td>
                             <td class="border px-4 py-2">
-                                <button class="add-to-class-btn bg-blue-500 text-white px-2 py-1 rounded"
-                                    data-id="{{ student.id }}">
+                                <button class="bg-blue-500 text-white px-2 py-1 rounded"
+                                    onclick="handleAddToClass('{{ student.ma_hoc_sinh }}')">
                                     Thêm
                                 </button>
                             </td>
@@ -59,10 +59,10 @@
             <div class="mb-6">
                 <h3 class="font-semibold text-gray-600 mb-2">Chọn lớp để thêm học sinh</h3>
                 <div class="relative w-72">
-                    <select class="class-select w-full border px-4 py-2 rounded">
-                        <option value="" disabled selected>Chọn lớp</option>
+                    <select class="class-select w-full border px-4 py-2 rounded" onchange="handleClassSelection(this)">
+                        <option disabled selected>Chọn lớp</option>
                         {% for class in classes %}
-                        <option value="{{ class.id }}">{{ class.name }}</option>
+                        <option value="{{ class.ma_lop }}">{{ class.ten_lop }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -84,12 +84,12 @@
                             </tr>
                         </thead>
                         <tbody class="students-in-class">
-                            <!-- Danh sách học sinh trong lớp sẽ được thêm vào đây -->
+                            <!-- Các hàng học sinh sẽ được thêm ở đây -->
                         </tbody>
                     </table>
                 </div>
                 <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                    onclick="handleGenerateListClick(this)">
+                    onclick="CreateStudentClass()">
                     Lập Danh Sách Lớp
                 </button>
                 <p class="mt-2 text-red-500 hidden"></p>

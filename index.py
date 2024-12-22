@@ -97,7 +97,6 @@ def add_class():
 	data = request.get_json()
 	# print("data===>",data)
 	if "data" in data and data["data"] is not None:
-		
 		data = data["data"]
 		for class__ in data:
 			print(class__["teach_id"])
@@ -110,14 +109,14 @@ def add_class():
 def add_hoc():
     # Lấy dữ liệu từ request
 	data = request.get_json()
-	# print("data===>",data)
+	print("data===>",data)
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for hoc__ in data:
 			dao.add_hoc(hoc__["class_id"],hoc__["student_id"])
 		return jsonify({"message": "add_hoc added successfully", "data": data}), 201
 	
-	return jsonify({"error": "No data provided"}), 400
+	return jsonify({"error": "No data provided"}), 400	
 
 # load trang admin
 # @app.route("/login-admin", methods=['post'])
@@ -145,7 +144,10 @@ def Student_admission():
 # Load Trang lập danh sách lớp
 @app.route('/Make_class_list')
 def Make_class_list():
-	return render_template('Make_class_list.html')
+	students = dao.get_students_no_Class()
+	class_id = dao.get_class()
+	return render_template("Make_class_list.html", students=students, classes=class_id)
+
 
 
 # load trang nhập điểm

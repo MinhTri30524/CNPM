@@ -37,8 +37,8 @@ def add_user(id, name, username, password, avatar):
 
 
 # thêm một học sinh mới
-def add_student(name, birthDate, phone, sex, address, email):
-	add = HocSinh(ho_ten=name, ngay_sinh=birthDate, gioi_tinh=sex, std=phone, dia_chi=address,mail=email)
+def add_student(ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
+	add = HocSinh(ho_ten=ho_ten, ngay_sinh=ngay_sinh, gioi_tinh=gioi_tinh, std=std, dia_chi=dia_chi,mail=mail)
 	db.session.add(add)
 	db.session.commit()
 
@@ -73,6 +73,13 @@ def get_students_no_Class():
 	students = HocSinh.getStudents_no_Class()
 	return students
 
+def remote_students(ma_hoc_sinh):
+	student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
+	if student:
+		db.session.delete(student)
+		db.session.commit()
+
+
 
 # tra ve hoc sinh theo id lop ho da co san
 def get_stdents_in_class(class_id):
@@ -92,6 +99,9 @@ def get_class():
 			for _class in class_id
 		]
 	return result
+
+#api lấy và lưu dữ liệu cho phần nhập điểm
+
 
 
 def get_user_by_id(ma_nhan_vien):

@@ -84,6 +84,7 @@ class HocSinh(db.Model):
 				"gioi_tinh": student.gioi_tinh,
 				"dia_chi": student.dia_chi,
 				"mail": student.mail,
+				"std": student.std
 			}
 			for student in students_no_class
 		]

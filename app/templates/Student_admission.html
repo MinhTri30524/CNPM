@@ -1,21 +1,25 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[10px]">
     <!-- Phần tiêu đề -->
-    <h1 class="text-xl font-bold text-gray-700 mb-6">
+    <h1 class="text-[40px] font-bold text-gray-700 mb-6">
         Tiếp Nhận Học Sinh
     </h1>
-
     <!-- Khung thông tin chính -->
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid">
         <!-- Form Thêm Học Sinh -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="font-bold text-gray-700 mb-4">Thông Tin Học Sinh</h2>
+
             <div class="grid grid-cols-2 gap-4">
                 <div class="field">
-                    <label for="name1">Họ tên</label>
-                    <input id="name1" type="text" class="border rounded p-2 w-full" placeholder="Nhập họ tên" />
+                    <label for="ho_ten">Mã Sinh Viên</label>
+                    <input id="ma_hoc_sinh" type="text" class="border rounded p-2 w-full" placeholder="22510500" />
+                </div>
+                <div class="field">
+                    <label for="ho_ten">Họ tên</label>
+                    <input id="ho_ten" type="text" class="border rounded p-2 w-full" placeholder="Nhập họ tên" />
                 </div>
                 <div class="field">
                     <label for="birthdate">Ngày Sinh</label>
@@ -28,8 +32,8 @@
                 <div class="field">
                     <label for="gender1">Giới Tính</label>
                     <select id="gender1" class="border rounded p-2 w-full">
-                        <option value="male">Nam</option>
-                        <option value="female">Nữ</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
                     </select>
                 </div>
                 <div class="field">
@@ -40,114 +44,223 @@
                     <label for="email1">Email</label>
                     <input id="email1" type="text" class="border rounded p-2 w-full" placeholder="Nhập email" />
                 </div>
-            </div>
-            <div class="mt-4 flex gap-2">
-                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
-                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
+                <div class="mt-7 flex gap-2">
+                    <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
+                    <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
+                </div>
             </div>
         </div>
+
 
         <!-- Danh Sách Học Sinh -->
         <div class="bg-white shadow-md rounded-lg p-6">
-            <h2 class="font-bold text-gray-700 mb-4">Danh Sách Học Sinh</h2>
-            <ul id="studentList" class="list-disc pl-4 cursor-pointer">
-                <!-- Danh sách học sinh -->
-            </ul>
-        </div>
-
-        <!-- Thông Tin Chi Tiết -->
-        <div id="studentDetails" class="col-span-2 bg-white shadow-md rounded-lg p-6 hidden">
-            <h2 class="font-bold text-gray-700 mb-4">Chi Tiết Học Sinh</h2>
-            <p id="detailsContent" class="text-gray-700"></p>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300 text-gray-700">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border px-4 py-2">MSSV</th>
+                            <th class="border px-4 py-2">Họ và Tên</th>
+                            <th class="border px-4 py-2">Giới Tính</th>
+                            <th class="border px-4 py-2">Năm Sinh</th>
+                            <th class="border px-4 py-2">Địa Chỉ</th>
+                            <th class="border px-4 py-2">Hành Động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="students-no-class" id="students-list">
+                        <tr>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2"></td>
+                            <td class="border px-4 py-2">
+                                <button class="add-to-class-btn bg-blue-500 text-white px-2 py-1 rounded"
+                                    data-id="{{ student.id }}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- <script>
-    // Lấy các phần tử từ DOM
-    const addStudentBtn = document.getElementById('addStudentBtn');
-    const resetBtn = document.getElementById('resetBtn');
-    const studentList = document.getElementById('studentList');
-    const detailsContainer = document.getElementById('studentDetails');
-    const detailsContent = document.getElementById('detailsContent');
 
-    const nameInput = document.getElementById('name1');
-    const dobInput = document.getElementById('birthdate');
-    const phoneInput = document.getElementById('phone1');
-    const genderInput = document.getElementById('gender1');
-    const addressInput = document.getElementById('address1');
-    const emailInput = document.getElementById('email1');
 
-    // Mảng lưu danh sách học sinh
-    const students = [];
+<script>
+    // Thu thập dữ liệu từ các trường trong form
+    studentsArray = {{ student | tojson }}
+    console.log(studentsArray)
+    arryAdd = []
 
-    // Thêm học sinh
-    addStudentBtn.addEventListener('click', () => {
-        const student = {
-            name: nameInput.value.trim(),
-            dob: dobInput.value,
-            phone: phoneInput.value.trim(),
-            gender: genderInput.value.trim(),
-            address: addressInput.value.trim(),
-            email: emailInput.value.trim()
+    document.getElementById("addStudentBtn").addEventListener("click", () => {
+        const studentData = {
+            ho_ten: document.getElementById("ho_ten").value.trim(),
+            ngay_sinh: document.getElementById("birthdate").value,
+            std: document.getElementById("phone1").value.trim(),
+            gioi_tinh: document.getElementById("gender1").value,
+            dia_chi: document.getElementById("address1").value.trim(),
+            mail: document.getElementById("email1").value.trim()
         };
-
-        if (student.name && student.dob) {
-            students.push(student);
-            renderStudentList();
-            resetForm();
-        } else {
-            alert('Vui lòng nhập đầy đủ họ tên và ngày sinh.');
-        }
+        // Thêm học sinh vào mảng
+        studentsArray.push(studentData);
+        arryAdd.push(studentData);
+        add_Student_database()
+        // Log mảng học sinh để kiểm tra
+        console.log(studentsArray);
+        // Xử lý sau khi thêm học sinh (có thể hiển thị thông báo, hoặc làm gì đó khác)
+        updateStudentList();
+        alert("Học sinh đã được thêm vào danh sách.");
     });
 
-    fetch('/api/add_Student', {
+    function add_Student_database() {
+
+        const dataToSend = {
+            key: "save_student",
+            data: arryAdd
+        };
+        fetch('/api/add_Student', {
             method: "POST",
-            body: JSON.stringify({
-                student
-            }),
+            body: JSON.stringify(dataToSend), // Truyền trực tiếp JSON
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
             }
-        }).then(res => res.json()).then(data => {
-            alert(data)
         })
-    // Hiển thị danh sách học sinh
-    function renderStudentList() {
-        studentList.innerHTML = ''; // Xóa danh sách cũ
-        students.forEach((student, index) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${student.name} - ${student.dob}`;
-            listItem.className = "hover:underline text-blue-600";
-            listItem.addEventListener('click', () => showStudentDetails(index));
-            studentList.appendChild(listItem);
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("Phản hồi từ server: " + JSON.stringify(data));
+                // Xử lý kết quả trả về từ server (có thể reset mảng hoặc cập nhật giao diện)
+                arryAdd = []; // Reset mảng sau khi lưu thành công
+            })
+            .catch(error => {
+                console.error("Lỗi xảy ra:", error);
+                alert("Có lỗi xảy ra khi gửi dữ liệu.");
+            });
+
+    }
+
+
+    function updateStudentList() {
+        const tbody = document.getElementById('students-list');
+        tbody.innerHTML = ''; // Xóa tất cả các dòng hiện tại trong tbody
+
+        studentsArray.forEach(student => {
+            // Tạo một dòng mới cho mỗi học sinh
+            const row = document.createElement('tr');
+
+            // Tạo các ô dữ liệu trong dòng
+            row.innerHTML = `
+            <td class="border px-4 py-2">${student.ma_hoc_sinh}</td>
+            <td class="border px-4 py-2">${student.ho_ten}</td>
+            <td class="border px-4 py-2">${student.gioi_tinh}</td>
+            <td class="border px-4 py-2">${student.ngay_sinh}</td>
+            <td class="border px-4 py-2">${student.dia_chi}</td>
+            <td class="border px-4 py-2">
+                <div class="flex space-x-2">
+                    <!-- Nút cây bút chì -->
+                    <button class="edit-btn bg-blue-500 text-white px-2 py-1 rounded flex items-center justify-center"
+                        data-id="${student.ma_hoc_sinh}">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <!-- Nút thùng rác -->
+                    <button class="delete-btn bg-blue-500 text-white px-2 py-1 rounded flex items-center justify-center"
+                        data-id="${student.ma_hoc_sinh}">
+                        <i class="fas fa-trash text-red-500"></i>
+                    </button>
+                </div>
+            </td>`;
+
+            tbody.appendChild(row); // Thêm dòng vào bảng
+        });
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Lấy giá trị data-id từ nút được click
+                const studentId = button.getAttribute('data-id');
+                removeStudent(studentId);
+            });
         });
     }
+    updateStudentList();
 
-    // Hiển thị thông tin chi tiết
-    function showStudentDetails(index) {
-        const student = students[index];
-        detailsContent.innerHTML = `
-        <strong>Họ tên:</strong> ${student.name} <br>
-        <strong>Ngày Sinh:</strong> ${student.dob} <br>
-        <strong>Số Điện Thoại:</strong> ${student.phone} <br>
-        <strong>Giới Tính:</strong> ${student.gender} <br>
-        <strong>Địa Chỉ:</strong> ${student.address} <br>
-        <strong>Email:</strong> ${student.email}
-    `;
-        detailsContainer.classList.remove('hidden');
+    document.addEventListener('DOMContentLoaded', () => {
+        const resetBtn = document.getElementById('resetBtn');
+        resetBtn.addEventListener('click', () => {
+            // Đặt tất cả các trường nhập liệu thành rỗng
+            document.getElementById('ho_ten').value = '';
+            document.getElementById('birthdate').value = '';
+            document.getElementById('phone1').value = '';
+            document.getElementById('gender1').value = 'Nam'; // Đặt lại giá trị mặc định
+            document.getElementById('address1').value = '';
+            document.getElementById('email1').value = '';
+        });
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lấy tất cả các nút có class "edit-btn"
+        const editButtons = document.querySelectorAll('.edit-btn');
+        // Lặp qua từng nút và thêm sự kiện click
+        editButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                // Lấy giá trị data-id từ nút được click
+                const studentId = button.getAttribute('data-id');
+                alert(studentId)
+                studentsArray.forEach(student => {
+                    if (String(student.ma_hoc_sinh) === studentId) {
+                        document.getElementById('ho_ten').value = student.ho_ten;
+                        document.getElementById('birthdate').value = student.ngay_sinh;
+                        document.getElementById('phone1').value = student.std;
+                        document.getElementById('gender1').value = student.gioi_tinh;
+                        document.getElementById('address1').value = student.dia_chi;
+                        document.getElementById('email1').value = student.mail;
+                    }
+                });
+            });
+        });
+    });
+
+
+
+    const deleteButtons = document.querySelectorAll('.delete-btn');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Lấy giá trị data-id từ nút được click
+            const studentId = button.getAttribute('data-id');
+            removeStudent(studentId);
+        });
+    });
+    function removeStudent(studentId) {
+        // Tìm học sinh trong mảng studentsArray dựa trên studentId
+        const studentIndex = studentsArray.findIndex(student => String(student.ma_hoc_sinh) === studentId);
+        if (studentIndex !== -1) {
+            // Xóa học sinh khỏi mảng
+            studentsArray.splice(studentIndex, 1);
+            alert('Học sinh đã được xóa khỏi mảng.');
+        }
+        fetch('/api/remote_Student', {
+                method: "POST",
+                body: JSON.stringify({
+                    "key": "remote",
+                    "data": [
+                    {
+                        "ma_sinh_vien": studentId
+                    }
+                ]}), // Truyền trực tiếp JSON
+                headers: {
+                    'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+                }
+            })
+        // Sau khi xóa, gọi hàm updateStudentList() để làm mới giao diện
+        updateStudentList();
     }
 
-    // Reset form
-    resetBtn.addEventListener('click', resetForm);
-    function resetForm() {
-        nameInput.value = '';
-        dobInput.value = '';
-        phoneInput.value = '';
-        genderInput.value = '';
-        addressInput.value = '';
-        emailInput.value = '';
-    }
-
-</script> -->
+</script>
 {% endblock %}

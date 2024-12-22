@@ -1,7 +1,7 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[10px]">
+<div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[5px]">
     <!-- Phần tiêu đề -->
     <h1 class="text-[40px] font-bold text-gray-700 mb-6">
         Tiếp Nhận Học Sinh
@@ -9,17 +9,21 @@
     <!-- Khung thông tin chính -->
     <div class="grid">
         <!-- Form Thêm Học Sinh -->
-        <div class="bg-white shadow-md rounded-lg p-6">
+        <div class="bg-white shadow-md rounded-lg p-6 mb-[20px] mx-auto">
             <h2 class="font-bold text-gray-700 mb-4">Thông Tin Học Sinh</h2>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-3 gap-2">
                 <div class="field">
                     <label for="ho_ten">Mã Sinh Viên</label>
                     <input id="ma_hoc_sinh" type="text" class="border rounded p-2 w-full" placeholder="22510500" />
                 </div>
-                <div class="field">
+                <div class="field col-span-2">
                     <label for="ho_ten">Họ tên</label>
                     <input id="ho_ten" type="text" class="border rounded p-2 w-full" placeholder="Nhập họ tên" />
+                </div>
+                <div class="field col-span-2 ">
+                    <label for="address1">Địa Chỉ</label>
+                    <input id="address1" type="text" class="border rounded p-2 w-full" placeholder="Nhập địa chỉ" />
                 </div>
                 <div class="field">
                     <label for="birthdate">Ngày Sinh</label>
@@ -36,24 +40,20 @@
                         <option value="Nữ">Nữ</option>
                     </select>
                 </div>
-                <div class="field">
-                    <label for="address1">Địa Chỉ</label>
-                    <input id="address1" type="text" class="border rounded p-2 w-full" placeholder="Nhập địa chỉ" />
-                </div>
+
                 <div class="field">
                     <label for="email1">Email</label>
                     <input id="email1" type="text" class="border rounded p-2 w-full" placeholder="Nhập email" />
                 </div>
-                <div class="mt-7 flex gap-2">
-                    <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
-                    <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
-                </div>
+            </div>
+            <div class="mt-7 flex gap-2">
+                <button id="addStudentBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Thêm Học Sinh</button>
+                <button id="resetBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Huỷ</button>
             </div>
         </div>
-
-
         <!-- Danh Sách Học Sinh -->
         <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="font-bold text-gray-700 mb-4">Danh Sách Học Sinh</h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full border border-gray-300 text-gray-700">
                     <thead>
@@ -97,6 +97,7 @@
 
     document.getElementById("addStudentBtn").addEventListener("click", () => {
         const studentData = {
+            ma_hoc_sinh: document.getElementById("ma_hoc_sinh").value.trim(),
             ho_ten: document.getElementById("ho_ten").value.trim(),
             ngay_sinh: document.getElementById("birthdate").value,
             std: document.getElementById("phone1").value.trim(),
@@ -104,8 +105,21 @@
             dia_chi: document.getElementById("address1").value.trim(),
             mail: document.getElementById("email1").value.trim()
         };
-        // Thêm học sinh vào mảng
-        studentsArray.push(studentData);
+        
+        //Xử lý một xíu giao diện
+        const exists = studentsArray.some(student => student.ma_hoc_sinh === studentData.ma_hoc_sinh);
+        if (!exists) {
+            // Nếu chưa tồn tại, thêm học sinh vào mảng
+            studentsArray.push(studentData);
+        } else {
+            for (let i = 0; i < studentsArray.length; i++) {
+                if (studentsArray[i].ma_hoc_sinh == studentData.ma_hoc_sinh) {
+                    console.log("studentsArray[i]", studentsArray[i])
+                    studentsArray[i] = studentData
+                }
+            }
+        }
+
         arryAdd.push(studentData);
         add_Student_database()
         // Log mảng học sinh để kiểm tra
@@ -113,6 +127,14 @@
         // Xử lý sau khi thêm học sinh (có thể hiển thị thông báo, hoặc làm gì đó khác)
         updateStudentList();
         alert("Học sinh đã được thêm vào danh sách.");
+        document.getElementById('ma_hoc_sinh').value = '';
+        document.getElementById('ho_ten').value = '';
+        document.getElementById('birthdate').value = '';
+        document.getElementById('phone1').value = '';
+        document.getElementById('gender1').value = 'Nam'; // Đặt lại giá trị mặc định
+        document.getElementById('address1').value = '';
+        document.getElementById('email1').value = '';
+        updateStudentList()
     });
 
     function add_Student_database() {
@@ -187,13 +209,23 @@
                 removeStudent(studentId);
             });
         });
+
+        const editButtons = document.querySelectorAll('.edit-btn');
+        // Lặp qua từng nút và thêm sự kiện click
+        editButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                const studentId = button.getAttribute('data-id');
+                fillStudentForm(studentId); // Gọi hàm fillStudentForm thay vì alert hoặc remove
+            });
+        });
+
     }
-    updateStudentList();
 
     document.addEventListener('DOMContentLoaded', () => {
         const resetBtn = document.getElementById('resetBtn');
         resetBtn.addEventListener('click', () => {
             // Đặt tất cả các trường nhập liệu thành rỗng
+            document.getElementById('ma_hoc_sinh').value = '';
             document.getElementById('ho_ten').value = '';
             document.getElementById('birthdate').value = '';
             document.getElementById('phone1').value = '';
@@ -204,30 +236,27 @@
     });
 
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // Lấy tất cả các nút có class "edit-btn"
-        const editButtons = document.querySelectorAll('.edit-btn');
-        // Lặp qua từng nút và thêm sự kiện click
-        editButtons.forEach(button => {
-            button.addEventListener('click', (event) => {
-                // Lấy giá trị data-id từ nút được click
-                const studentId = button.getAttribute('data-id');
-                alert(studentId)
-                studentsArray.forEach(student => {
-                    if (String(student.ma_hoc_sinh) === studentId) {
-                        document.getElementById('ho_ten').value = student.ho_ten;
-                        document.getElementById('birthdate').value = student.ngay_sinh;
-                        document.getElementById('phone1').value = student.std;
-                        document.getElementById('gender1').value = student.gioi_tinh;
-                        document.getElementById('address1').value = student.dia_chi;
-                        document.getElementById('email1').value = student.mail;
-                    }
-                });
-            });
+    // Hàm điền thông tin học sinh vào form
+    function fillStudentForm(studentId) {
+        studentsArray.forEach(student => {
+            if (String(student.ma_hoc_sinh) === studentId) {
+                document.getElementById('ma_hoc_sinh').value = student.ma_hoc_sinh;
+                document.getElementById('ho_ten').value = student.ho_ten;
+                document.getElementById('birthdate').value = student.ngay_sinh;
+                document.getElementById('phone1').value = student.std;
+                document.getElementById('gender1').value = student.gioi_tinh;
+                document.getElementById('address1').value = student.dia_chi;
+                document.getElementById('email1').value = student.mail;
+            }
         });
-    });
+    }
 
-
+    // Hàm xóa học sinh
+    function removeStudent(studentId) {
+        // Thực hiện xóa học sinh theo studentId
+        studentsArray = studentsArray.filter(student => String(student.ma_hoc_sinh) !== studentId);
+        alert('Học sinh đã được xóa.');
+    }
 
     const deleteButtons = document.querySelectorAll('.delete-btn');
     deleteButtons.forEach(button => {
@@ -237,6 +266,7 @@
             removeStudent(studentId);
         });
     });
+
     function removeStudent(studentId) {
         // Tìm học sinh trong mảng studentsArray dựa trên studentId
         const studentIndex = studentsArray.findIndex(student => String(student.ma_hoc_sinh) === studentId);
@@ -246,21 +276,24 @@
             alert('Học sinh đã được xóa khỏi mảng.');
         }
         fetch('/api/remote_Student', {
-                method: "POST",
-                body: JSON.stringify({
-                    "key": "remote",
-                    "data": [
+            method: "POST",
+            body: JSON.stringify({
+                "key": "remote",
+                "data": [
                     {
                         "ma_sinh_vien": studentId
                     }
-                ]}), // Truyền trực tiếp JSON
-                headers: {
-                    'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
-                }
-            })
+                ]
+            }), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        })
         // Sau khi xóa, gọi hàm updateStudentList() để làm mới giao diện
         updateStudentList();
     }
+
+    updateStudentList();
 
 </script>
 {% endblock %}

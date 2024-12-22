@@ -86,7 +86,7 @@ def add_student():
 		data = data["data"]
 		for student__ in data:
 			print("data======>",data)
-			dao.add_student(student__["ho_ten"],student__["ngay_sinh"],student__["std"],student__["gioi_tinh"],student__["dia_chi"],student__["mail"])
+			dao.add_student(student__["ma_hoc_sinh"],student__["ho_ten"],student__["ngay_sinh"],student__["std"],student__["gioi_tinh"],student__["dia_chi"],student__["mail"])
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400

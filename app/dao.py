@@ -37,10 +37,26 @@ def add_user(id, name, username, password, avatar):
 
 
 # thêm một học sinh mới
-def add_student(ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
-	add = HocSinh(ho_ten=ho_ten, ngay_sinh=ngay_sinh, gioi_tinh=gioi_tinh, std=std, dia_chi=dia_chi,mail=mail)
-	db.session.add(add)
-	db.session.commit()
+def add_student(ma_hoc_sinh,ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
+	# Kiểm tra xem học sinh đã tồn tại trong cơ sở dữ liệu chưa
+    existing_student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
+    if existing_student:
+        # Nếu học sinh đã tồn tại, cập nhật những trường thay đổi
+        existing_student.ho_ten = ho_ten
+        existing_student.ngay_sinh = ngay_sinh
+        existing_student.std = std
+        existing_student.gioi_tinh = gioi_tinh
+        existing_student.dia_chi = dia_chi
+        existing_student.mail = mail
+        db.session.commit()  # Lưu lại thay đổi vào cơ sở dữ liệu
+        return "Thông tin học sinh đã được cập nhật."
+    else:
+        # Nếu học sinh chưa tồn tại, thêm mới học sinh
+        add = HocSinh(ma_hoc_sinh=ma_hoc_sinh, ho_ten=ho_ten, ngay_sinh=ngay_sinh,
+                      gioi_tinh=gioi_tinh, std=std, dia_chi=dia_chi, mail=mail)
+        db.session.add(add)
+        db.session.commit()  # Lưu học sinh mới vào cơ sở dữ liệu
+        return "Học sinh đã được thêm mới."
 
 
 # tạo một lớp học mới

@@ -58,7 +58,7 @@ class NhanVien(User):
 # Lớp Học sinh không kế thừa từ User
 class HocSinh(db.Model):
 	__tablename__ = 'hoc_sinh'
-	ma_hoc_sinh = Column(Integer, primary_key=True, autoincrement=True)
+	ma_hoc_sinh = Column(Integer, primary_key=True)
 	ho_ten = Column(String(100), nullable=False)
 	ngay_sinh = Column(DateTime, nullable=False)
 	gioi_tinh = Column(String(10), nullable=False)

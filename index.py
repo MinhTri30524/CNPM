@@ -3,6 +3,10 @@ from flask import render_template, request, redirect, session, jsonify
 from flask_login import login_user, logout_user
 from app import app, login
 from app import dao, utils
+from app.dao import course_report
+from app.models import UserRole
+
+
 # from app.models import UserRole
 
 
@@ -219,7 +223,24 @@ def load_user(user_id):
 
 @app.route("/login-admin", methods=['post'])
 def login_admin_process():
-    return redirect('/admin')
+	username = request.form.get('username')
+	password = request.form.get('password')
+
+	u = dao.auth_user(username=username, password=password, role=UserRole.ADMIN)
+	if u:
+		login_user(u)
+
+	return redirect('/admin')
+
+
+@app.route('/api/course-report')
+def api_course_report():
+    course = request.args.get('course', 'Toán')  # Môn học
+    year = request.args.get('year', '2023-2024')  # Năm học
+    semester = request.args.get('semester', 'Học kỳ 1')  # Học kỳ
+
+    data = course_report(course, year, semester)
+    return jsonify(data)
 
 
 if __name__ == '__main__':

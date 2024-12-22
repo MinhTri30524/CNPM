@@ -28,7 +28,7 @@ def add_user(id, name, username, password, avatar):
 	elif id.startswith("18"):
 		role = "EMLOYES"
 	u = User(ma_nhan_vien=id, ho_ten=name, username=username, password=password,
-			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg',user_role=role)
+			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg', user_role=role)
 	if avatar:
 		res = cloudinary.uploader.upload(avatar)
 		u.avatar = res.get('secure_url')
@@ -59,6 +59,7 @@ def add_student(ma_hoc_sinh,ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
         return "Học sinh đã được thêm mới."
 
 
+
 # tạo một lớp học mới
 def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
     existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
@@ -78,6 +79,7 @@ def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
     
     db.session.commit()
 
+
 # Lấy tất cả giảng viên ra
 def get_teacher():
 	tech = User.query.filter(User.user_role == "TEACH").all()
@@ -91,11 +93,13 @@ def get_teacher():
 		]
 	return result
 
+
 # add hoc thanh lap lop tu nhan vien tao
-def add_hoc(class_id,student_id):
+def add_hoc(class_id, student_id):
 	add = Hoc(lop_hoc_id=class_id, hoc_sinh_id=student_id)
 	db.session.add(add)
 	db.session.commit()
+
 
 # lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
 def get_students_no_Class():
@@ -135,7 +139,6 @@ def get_class():
 				"ten": _class.ten,
 				"khoi_id": _class.khoi_id,
 				"giang_vien_id":_class.giang_vien_id
-				# Các cột khác nếu có...
 			}
 			for _class in class_id
 		]
@@ -254,7 +257,7 @@ def course_report(course, year, semester):
 			"lop": statis[0],
 			"si_so": statis[1],
 			"so_luong_dat": int(statis[2]),
-			"ty_le_dat": float(statis[3]) * 100
+			"ty_le_dat": float(statis[3])
 		}
 		for statis in statis
 	]
@@ -263,5 +266,5 @@ def course_report(course, year, semester):
 # Chạy thử các hàm
 if __name__ == '__main__':
 	with app.app_context():
-		res = course_report('Vật Lý', '2023-2024', 'Học kỳ 2')
+		res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
 		print(res)

@@ -89,39 +89,69 @@ def add_student():
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for student__ in data:
-			dao.add_student(student__["name"],student__["brithday"],student__["phone"],student__["sex"],student__["address"],student__["mail"])
+			print("data======>",data)
+			dao.add_student(student__["ma_hoc_sinh"],student__["ho_ten"],student__["ngay_sinh"],student__["std"],student__["gioi_tinh"],student__["dia_chi"],student__["mail"])
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400
+
+@app.route("/api/remote_Student", methods=['POST'])
+def remote_student():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for student__ in data:
+			print("data======>",data)
+			dao.remote_students(student__["ma_sinh_vien"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
+	return jsonify({"error": "No data provided"}), 400
+
+
 
 @app.route("/api/add_class", methods=['POST'])
 def add_class():
     # Lấy dữ liệu từ request
 	data = request.get_json()
-	# print("data===>",data)
+	print("data===>",data)
 	if "data" in data and data["data"] is not None:
-		
 		data = data["data"]
 		for class__ in data:
-			print(class__["teach_id"])
-			dao.add_class_Student(class__["malop"],class__["member"],class__["name"],class__["block_id"],class__["teach_id"])
+			print(class__["giang_vien_id"])
+			dao.add_class_student(class__["ma_lop"],class__["so_luong"],class__["ten"],class__["khoi_id"],class__["giang_vien_id"])
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400
+
+@app.route("/api/remote_class", methods=['POST'])
+def remote_class():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for class__ in data:
+			print("data======>",data)
+			dao.remote_class(class__["ma_lop"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
+
 
 @app.route("/api/add_hoc", methods=['POST'])
 def add_hoc():
     # Lấy dữ liệu từ request
 	data = request.get_json()
-	# print("data===>",data)
+	print("data===>",data)
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for hoc__ in data:
 			dao.add_hoc(hoc__["class_id"],hoc__["student_id"])
 		return jsonify({"message": "add_hoc added successfully", "data": data}), 201
 	
-	return jsonify({"error": "No data provided"}), 400
+	return jsonify({"error": "No data provided"}), 400	
 
 # load trang admin
 # @app.route("/login-admin", methods=['post'])
@@ -140,16 +170,22 @@ def add_hoc():
 
 
 
+
+
 # Load Trang Tiếp Nhận Học Sinh
 @app.route('/Student_admission')
 def Student_admission():
-	return render_template('Student_admission.html')
+	students = dao.get_students_no_Class()
+	return render_template('Student_admission.html', student = students)
 
 
 # Load Trang lập danh sách lớp
 @app.route('/Make_class_list')
 def Make_class_list():
-	return render_template('Make_class_list.html')
+	students = dao.get_students_no_Class()
+	class_id = dao.get_class()
+	return render_template("Make_class_list.html", students=students, classes=class_id)
+
 
 
 # load trang nhập điểm
@@ -173,7 +209,10 @@ def Reporting_statistics():
 # Load trang thay đổi quy định
 @app.route('/Change_rules')
 def Change_rules():
-	return render_template('Change_rules.html')
+	teacher = dao.get_teacher()
+	khoi = dao.get_khoi()
+	class__ = dao.get_class()
+	return render_template('Change_rules.html',teacher = teacher, khoi = khoi, class__ = class__)
 
 
 # Xử lý user từ cơ sở dữ liệu

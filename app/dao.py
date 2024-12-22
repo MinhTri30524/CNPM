@@ -192,5 +192,5 @@ def course_report(course, year, semester):
 # Chạy thử các hàm
 if __name__ == '__main__':
 	with app.app_context():
-		res = course_report('Vật Lý', '2023-2024', 'Học kỳ 2')
+		res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
 		print(res)

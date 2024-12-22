@@ -132,7 +132,6 @@ class GiangVien(User):
 	lop_hoc = relationship("LopHoc", back_populates="giang_vien", uselist=False)
 
 
-
 # Lớp Lớp học
 class LopHoc(db.Model):
 	__tablename__ = 'lop_hoc'
@@ -148,7 +147,6 @@ class LopHoc(db.Model):
 	giang_vien_id = Column(Integer, ForeignKey('giang_vien.ma_nhan_vien'),
 						   unique=True)
 	giang_vien = relationship("GiangVien", back_populates="lop_hoc", uselist=False, lazy=True)
-
 
 
 # Lớp Khối

@@ -3,7 +3,7 @@ import hashlib
 import cloudinary.uploader
 
 from app import db, app
-from app.models import User, HocSinh, GiangVien, LopHoc, Diem, Hoc, HocKy, MonHoc
+from app.models import User, HocSinh, LopHoc, Diem, Hoc, HocKy, MonHoc
 
 
 # lấy user đó ra
@@ -28,7 +28,7 @@ def add_user(id, name, username, password, avatar):
 	elif id.startswith("18"):
 		role = "EMLOYES"
 	u = User(ma_nhan_vien=id, ho_ten=name, username=username, password=password,
-			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg',user_role=role)
+			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg', user_role=role)
 	if avatar:
 		res = cloudinary.uploader.upload(avatar)
 		u.avatar = res.get('secure_url')
@@ -38,35 +38,40 @@ def add_user(id, name, username, password, avatar):
 
 # thêm một học sinh mới
 def add_student(name, birthDate, phone, sex, address, email):
-	add = HocSinh(ho_ten=name, ngay_sinh=birthDate, gioi_tinh=sex, std=phone, dia_chi=address,mail=email)
+	add = HocSinh(ho_ten=name, ngay_sinh=birthDate, gioi_tinh=sex, std=phone, dia_chi=address,
+				  mail=email)
 	db.session.add(add)
 	db.session.commit()
 
 
 # tạo một lớp học mới
 def add_class_Student(malop, so_luong, ten, khoi_id, giang_vien_id):
-	class__ = LopHoc(ma_lop = malop, so_luong = so_luong, ten =ten,khoi_id=khoi_id, giang_vien_id= giang_vien_id)
+	class__ = LopHoc(ma_lop=malop, so_luong=so_luong, ten=ten, khoi_id=khoi_id,
+					 giang_vien_id=giang_vien_id)
 	db.session.add(class__)
 	db.session.commit()
+
 
 # Lấy tất cả giảng viên ra
 def get_teacher():
 	tech = User.query.filter(User.user_role == "TEACH").all()
 	result = [
-			{
-				"ma_lop": tech__.ho_ten,
-				"ten_lop": tech__.ma_nhan_vien,
-				# Các cột khác nếu có...
-			}
-			for tech__ in tech
-		]
+		{
+			"ma_lop": tech__.ho_ten,
+			"ten_lop": tech__.ma_nhan_vien,
+			# Các cột khác nếu có...
+		}
+		for tech__ in tech
+	]
 	return result
 
+
 # add hoc thanh lap lop tu nhan vien tao
-def add_hoc(class_id,student_id):
+def add_hoc(class_id, student_id):
 	add = Hoc(lop_hoc_id=class_id, hoc_sinh_id=student_id)
 	db.session.add(add)
 	db.session.commit()
+
 
 # lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
 def get_students_no_Class():
@@ -84,13 +89,13 @@ def get_stdents_in_class(class_id):
 def get_class():
 	class_id = LopHoc.query.all()
 	result = [
-			{
-				"ma_lop": _class.ma_lop,
-				"ten_lop": _class.ten,
-				# Các cột khác nếu có...
-			}
-			for _class in class_id
-		]
+		{
+			"ma_lop": _class.ma_lop,
+			"ten_lop": _class.ten,
+			# Các cột khác nếu có...
+		}
+		for _class in class_id
+	]
 	return result
 
 

@@ -208,7 +208,7 @@ def course_report(course, year, semester):
 			"lop": statis[0],
 			"si_so": statis[1],
 			"so_luong_dat": int(statis[2]),
-			"ty_le_dat": float(statis[3]) * 100
+			"ty_le_dat": float(statis[3])
 		}
 		for statis in statis
 	]

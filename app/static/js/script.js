@@ -2,16 +2,67 @@ let selectedClassId = null;
 
 // Chọn lớp
 function handleClassSelection(selectElement) {
-    selectedClassId = selectElement.value;  // Lấy giá trị lớp đã chọn
+    selectedClassId = selectElement.value; // Lấy class_id từ chọn lớp
+
+    // Kiểm tra nếu có lớp được chọn
+    if (!selectedClassId) {
+        alert("Vui lòng chọn lớp!");
+        return;
+    }
+
+    // Tạo dữ liệu request
+    const requestData = {
+        data: [{
+            class_id: selectedClassId
+        }]
+    };
+
+    // Gửi request để lấy danh sách học sinh
+    fetch('/api/get_students_by_class', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData) // Gửi dữ liệu lớp
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.message === 'Students fetched successfully') {
+                // Hiển thị danh sách học sinh trong lớp
+                const studentsInClassTable = document.querySelector('.students-in-class');
+                studentsInClassTable.innerHTML = '';  // Xóa nội dung cũ
+
+                data.data.forEach((student, index) => {
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `
+                    <td class="border px-4 py-2">${index + 1}</td>
+                    <td class="border px-4 py-2">${student.ho_ten}</td>
+                    <td class="border px-4 py-2">${student.gioi_tinh}</td>
+                    <td class="border px-4 py-2">${student.ngay_sinh}</td>
+                    <td class="border px-4 py-2">${student.dia_chi}</td>
+                    <td class="border px-4 py-2">${student.lop_hoc_id}</td>
+                `;
+                    studentsInClassTable.appendChild(newRow);
+                });
+            } else {
+                alert("Không thể tải danh sách học sinh.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Đã xảy ra lỗi khi tải dữ liệu.");
+        });
 }
 
-// Thêm học sinh vào lớp
+
+
 function handleAddToClass(studentId) {
     if (!selectedClassId) {
         alert("Vui lòng chọn lớp trước khi thêm học sinh!");
         return;
     }
-    // Gửi dữ liệu đến server để thêm học sinh vào lớp
+
+    // Gửi dữ liệu đến server để thêm học sinh vào bảng hoc
     fetch('/api/add_hoc', {
         method: 'POST',
         body: JSON.stringify({
@@ -25,21 +76,50 @@ function handleAddToClass(studentId) {
             'Content-Type': 'application/json',
         }
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to add to hoc: " + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
-            alert("Phản hồi từ server: " + JSON.stringify(data));
-            console.log("Dữ liệu trả về từ server:", data);
             if (data.message === 'add_hoc added successfully') {
-                // Xóa học sinh khỏi bảng "Chưa Có Lớp"
+                // Payload cho API update_student_class
+                const updateStudentRequest = {
+                    data: [{
+                        "ma_hoc_sinh": studentId,
+                        "lop_hoc_id": selectedClassId
+                    }]
+                };
+
+                // Gửi tiếp yêu cầu để cập nhật bảng student
+                return fetch('/api/update_student_class', {
+                    method: 'POST',
+                    body: JSON.stringify(updateStudentRequest),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+            } else {
+                throw new Error("Lỗi khi thêm vào bảng hoc: " + JSON.stringify(data));
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to update student class: " + response.statusText);
+            }
+            return response.json();
+        })
+        .then(updateData => {
+            if (updateData.message === 'Students updated successfully') {
+                // Cập nhật giao diện sau khi thành công
                 const studentRow = document.querySelector(`button[onclick="handleAddToClass('${studentId}')"]`).closest('tr');
                 const cells = Array.from(studentRow.children).slice(0, -1); // Lấy tất cả các ô trừ cột hành động
                 studentRow.remove();
 
-                // Thêm học sinh vào bảng "Danh Sách Học Sinh Trong Lớp"
                 const studentsInClassTable = document.querySelector('.students-in-class');
                 const newRow = document.createElement('tr');
 
-                // Tạo các ô từ dữ liệu của học sinh
                 cells.forEach(cell => {
                     const newCell = document.createElement('td');
                     newCell.className = 'border px-4 py-2';
@@ -47,7 +127,6 @@ function handleAddToClass(studentId) {
                     newRow.appendChild(newCell);
                 });
 
-                // Thêm cột "Lớp"
                 const classCell = document.createElement('td');
                 classCell.className = 'border px-4 py-2';
                 classCell.textContent = document.querySelector('.class-select option:checked').textContent;
@@ -55,17 +134,18 @@ function handleAddToClass(studentId) {
 
                 studentsInClassTable.appendChild(newRow);
 
-                alert("Thêm học sinh vào lớp thành công!");
+                alert("Thêm học sinh vào lớp và cập nhật thành công!");
             } else {
-                alert("Check---> " + JSON.stringify(data));
-                //alert("Có lỗi xảy ra: " + data.message);
+                throw new Error("Lỗi khi cập nhật bảng student: " + JSON.stringify(updateData));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Không thể thêm học sinh vào lớp. Vui lòng thử lại!");
+            alert("Không thể thêm học sinh vào lớp hoặc cập nhật thông tin. Vui lòng thử lại!");
         });
 }
+
+
 
 function StudentNoClass() {
     fetch('/api/get_student_no_class')

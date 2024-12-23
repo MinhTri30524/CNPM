@@ -154,6 +154,71 @@ def add_hoc():
 	return jsonify({"error": "No data provided"}), 400	
 
 
+@app.route("/api/update_student_class", methods=['POST'])
+def update_student_class():
+    try:
+        # Lấy dữ liệu từ request
+        data = request.get_json()
+        print("Payload received in Flask:", data)
+
+        # Kiểm tra payload hợp lệ
+        if not data or "data" not in data or not isinstance(data["data"], list):
+            return jsonify({"error": "Invalid or missing payload. 'data' must be a list."}), 400
+
+        # Lặp qua từng học sinh để thêm/cập nhật
+        for student in data["data"]:
+            if "ma_hoc_sinh" not in student or "lop_hoc_id" not in student:
+                return jsonify({
+                    "error": "Each student entry must include 'ma_hoc_sinh' and 'lop_hoc_id'."
+                }), 400
+
+            # Gọi hàm DAO để thêm/cập nhật
+            dao.update_student_class(student["ma_hoc_sinh"], student["lop_hoc_id"])
+
+        return jsonify({"message": "Students updated successfully"}), 200
+
+    except Exception as e:
+        print("Error in update_student_class:", e)
+        return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
+
+
+@app.route("/api/get_students_by_class", methods=['POST'])
+def get_students_by_class():
+    # Lấy dữ liệu từ request
+    data = request.get_json()
+    print("data===>", data)
+
+    # Kiểm tra nếu có dữ liệu 'data' trong request hay không
+    if "data" in data and data["data"] is not None:
+        data = data["data"]
+        
+        # Lấy class_id từ dữ liệu
+        class_id = data[0]["class_id"]
+
+        try:
+            # Gọi phương thức từ dao để lấy danh sách học sinh theo class_id
+            students = dao.get_students_by_class(class_id)
+
+            # Chuyển dữ liệu thành dạng JSON và trả về
+            students_data = [{
+                'ma_hoc_sinh': student.ma_hoc_sinh,
+                'ho_ten': student.ho_ten,
+                'gioi_tinh': student.gioi_tinh,
+                'ngay_sinh': student.ngay_sinh.strftime('%Y-%m-%d'),  # Định dạng ngày sinh
+                'dia_chi': student.dia_chi,
+                'lop_hoc_id': student.lop_hoc_id
+            } for student in students]
+            
+            return jsonify({"message": "Students fetched successfully", "data": students_data}), 200
+
+        except Exception as e:
+            return jsonify({"error": "Failed to fetch students", "details": str(e)}), 500
+    
+    return jsonify({"error": "No class_id provided"}), 400
+
+
+
+
 @app.route('/api/get_student_scores', methods=['POST'])
 def get_student_scores():
     data = request.json

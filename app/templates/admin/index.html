@@ -5,6 +5,118 @@
 {% if current_user.is_authenticated %}
 <h1 class="text-info mt-1">CHÀO MỪNG ĐẾN VỚI TRANG QUẢN TRỊ!</h1>
 <h2 class="text-danger">Chào {{ current_user.username }}.</h2>
+
+<div class="row">
+    <div class="col-md-5 col-sm-12">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Lớp</th>
+                    <th>Sĩ số</th>
+                    <th>Số lượng đạt</th>
+                    <th>Tỷ lệ đạt (%)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stat in stats %}
+                <tr>
+                    <td>{{ stat.lop }}</td>
+                    <td>{{ stat.si_so }}</td>
+                    <td>{{ stat.so_luong_dat }}</td>
+                    <td>{{ stat.ty_le_dat * 100 }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-7 col-sm-12">
+        <canvas id="classChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+let chartInstance = null;
+
+// Function to create the chart
+function createChart(labels, rates) {
+    const ctx = document.getElementById('classChart').getContext('2d');
+
+    // Destroy the old chart if it exists
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Tỉ lệ đạt (%)',
+                data: rates,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return value * 100 + '%'; // Convert value to percentage
+                        }
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let value = context.raw;
+                            return value * 100 + '%'; // Convert value to percentage
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Initial data from server
+const data = {{ stats|tojson }};
+const labels = data.map(stat => stat.lop);
+const rates = data.map(stat => stat.ty_le_dat);
+createChart(labels, rates);
+
+// Function to fetch data via API and update the chart
+async function fetchChartData(course, year, semester) {
+    const url = `/api/course-report?course=${course}&year=${year}&semester=${semester}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        alert('Unable to load data from server.');
+        return;
+    }
+
+    const data = await response.json();
+    const labels = data.map(stat => stat.lop);
+    const rates = data.map(stat => stat.ty_le_dat);
+    createChart(labels, rates);
+}
+
+// Event to filter data
+document.getElementById('filter-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const course = document.getElementById('course').value;
+    const year = document.getElementById('year').value;
+    const semester = document.getElementById('semester').value;
+
+    fetchChartData(course, year, semester);
+});
+</script>
 {% else %}
 <h1 class="text-center text-info mt-1">ĐĂNG NHẬP QUẢN TRỊ</h1>
 <form method="post" action="/login-admin">
@@ -19,5 +131,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Đăng nhập</button>
 </form>
+
 {% endif %}
 {% endblock %}

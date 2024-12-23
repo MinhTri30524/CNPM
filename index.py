@@ -3,6 +3,10 @@ from flask import render_template, request, redirect, session, jsonify
 from flask_login import login_user, logout_user
 from app import app, login
 from app import dao, utils
+from app.dao import course_report
+from app.models import UserRole
+
+
 # from app.models import UserRole
 
 
@@ -115,11 +119,26 @@ def add_class():
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for class__ in data:
-			print(class__["teach_id"])
-			dao.add_class_Student(class__["malop"],class__["member"],class__["name"],class__["block_id"],class__["teach_id"])
+			print(class__["giang_vien_id"])
+			dao.add_class_student(class__["ma_lop"],class__["so_luong"],class__["ten"],class__["khoi_id"],class__["giang_vien_id"])
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400
+
+@app.route("/api/remote_class", methods=['POST'])
+def remote_class():
+    # Lấy dữ liệu từ request
+	data = request.get_json()
+	# print("data===>",data)
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for class__ in data:
+			print("data======>",data)
+			dao.remote_class(class__["ma_lop"])
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
+
 
 @app.route("/api/add_hoc", methods=['POST'])
 def add_hoc():
@@ -250,7 +269,10 @@ def Reporting_statistics():
 # Load trang thay đổi quy định
 @app.route('/Change_rules')
 def Change_rules():
-	return render_template('Change_rules.html')
+	teacher = dao.get_teacher()
+	khoi = dao.get_khoi()
+	class__ = dao.get_class()
+	return render_template('Change_rules.html',teacher = teacher, khoi = khoi, class__ = class__)
 
 
 # Xử lý user từ cơ sở dữ liệu
@@ -261,7 +283,24 @@ def load_user(user_id):
 
 @app.route("/login-admin", methods=['post'])
 def login_admin_process():
-    return redirect('/admin')
+	username = request.form.get('username')
+	password = request.form.get('password')
+
+	u = dao.auth_user(username=username, password=password, role=UserRole.ADMIN)
+	if u:
+		login_user(u)
+
+	return redirect('/admin')
+
+
+@app.route('/api/course-report')
+def api_course_report():
+    course = request.args.get('course', 'Toán')  # Môn học
+    year = request.args.get('year', '2023-2024')  # Năm học
+    semester = request.args.get('semester', 'Học kỳ 1')  # Học kỳ
+
+    data = course_report(course, year, semester)
+    return jsonify(data)
 
 
 if __name__ == '__main__':

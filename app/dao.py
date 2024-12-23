@@ -3,7 +3,7 @@ import hashlib
 import cloudinary.uploader
 
 from app import db, app
-from app.models import User, HocSinh, GiangVien, LopHoc, Diem, Hoc, HocKy, MonHoc
+from app.models import User, HocSinh, GiangVien, LopHoc, Diem, Hoc, HocKy, MonHoc, Khoi
 
 
 # lấy user đó ra
@@ -28,7 +28,7 @@ def add_user(id, name, username, password, avatar):
 	elif id.startswith("18"):
 		role = "EMLOYES"
 	u = User(ma_nhan_vien=id, ho_ten=name, username=username, password=password,
-			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg',user_role=role)
+			 avatar='https://chuphinhthe.com/upload/product/8239-duong-4751.jpg', user_role=role)
 	if avatar:
 		res = cloudinary.uploader.upload(avatar)
 		u.avatar = res.get('secure_url')
@@ -59,30 +59,47 @@ def add_student(ma_hoc_sinh,ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
         return "Học sinh đã được thêm mới."
 
 
+
 # tạo một lớp học mới
-def add_class_Student(malop, so_luong, ten, khoi_id, giang_vien_id):
-	class__ = LopHoc(ma_lop = malop, so_luong = so_luong, ten =ten,khoi_id=khoi_id, giang_vien_id= giang_vien_id)
-	db.session.add(class__)
-	db.session.commit()
+def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
+    existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
+
+    if existing_class:
+        # Nếu ma_lop đã tồn tại, cập nhật nội dung
+        existing_class.so_luong = so_luong
+        existing_class.ten = ten
+        existing_class.khoi_id = khoi_id
+        existing_class.giang_vien_id = giang_vien_id
+        print(f"Đã cập nhật lớp học với mã lớp: {malop}")
+    else:
+       
+        new_class = LopHoc(ma_lop=malop, so_luong=so_luong, ten=ten, khoi_id=khoi_id, giang_vien_id=giang_vien_id)
+        db.session.add(new_class)
+        print(f"Đã thêm lớp học mới với mã lớp: {malop}")
+    
+    db.session.commit()
+
 
 # Lấy tất cả giảng viên ra
 def get_teacher():
 	tech = User.query.filter(User.user_role == "TEACH").all()
 	result = [
 			{
-				"ma_lop": tech__.ho_ten,
-				"ten_lop": tech__.ma_nhan_vien,
+				"ho_ten": tech__.ho_ten,
+				"ma_nhan_vien": tech__.ma_nhan_vien,
 				# Các cột khác nếu có...
 			}
 			for tech__ in tech
 		]
 	return result
 
+
 # add hoc thanh lap lop tu nhan vien tao
-def add_hoc(class_id,student_id):
+def add_hoc(class_id, student_id):
 	add = Hoc(lop_hoc_id=class_id, hoc_sinh_id=student_id)
 	db.session.add(add)
 	db.session.commit()
+
 
 # lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
 def get_students_no_Class():
@@ -95,6 +112,10 @@ def remote_students(ma_hoc_sinh):
 		db.session.delete(student)
 		db.session.commit()
 
+def get_khoi():
+	khoi__ = Khoi.query.all()
+	return khoi__
+
 
 
 # tra ve hoc sinh theo id lop ho da co san
@@ -102,6 +123,11 @@ def get_stdents_in_class(class_id):
 	students_in_class = HocSinh.get_students_in_class(class_id)
 	return students_in_class
 
+def remote_class(ma_lop):
+	class__ =  LopHoc.query.filter_by(ma_lop=ma_lop).first()
+	if class__:
+		db.session.delete(class__)
+		db.session.commit()
 
 # lay tat ca cac lop hoc da duoc tao ra
 def get_class():
@@ -109,8 +135,10 @@ def get_class():
 	result = [
 			{
 				"ma_lop": _class.ma_lop,
-				"ten_lop": _class.ten,
-				# Các cột khác nếu có...
+				"so_luong":_class.so_luong,
+				"ten": _class.ten,
+				"khoi_id": _class.khoi_id,
+				"giang_vien_id":_class.giang_vien_id
 			}
 			for _class in class_id
 		]
@@ -229,7 +257,7 @@ def course_report(course, year, semester):
 			"lop": statis[0],
 			"si_so": statis[1],
 			"so_luong_dat": int(statis[2]),
-			"ty_le_dat": float(statis[3]) * 100
+			"ty_le_dat": float(statis[3])
 		}
 		for statis in statis
 	]
@@ -238,5 +266,5 @@ def course_report(course, year, semester):
 # Chạy thử các hàm
 if __name__ == '__main__':
 	with app.app_context():
-		res = course_report('Vật Lý', '2023-2024', 'Học kỳ 2')
+		res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
 		print(res)

@@ -3,7 +3,7 @@ import hashlib
 import cloudinary.uploader
 
 from app import db, app
-from app.models import User, HocSinh, GiangVien, LopHoc, Diem, Hoc, HocKy, MonHoc, Khoi
+from app.models import User, HocSinh, LopHoc, Diem, Hoc, HocKy, MonHoc, Khoi
 
 
 # lấy user đó ra
@@ -37,60 +37,60 @@ def add_user(id, name, username, password, avatar):
 
 
 # thêm một học sinh mới
-def add_student(ma_hoc_sinh,ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
+def add_student(ma_hoc_sinh, ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
 	# Kiểm tra xem học sinh đã tồn tại trong cơ sở dữ liệu chưa
-    existing_student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
-    if existing_student:
-        # Nếu học sinh đã tồn tại, cập nhật những trường thay đổi
-        existing_student.ho_ten = ho_ten
-        existing_student.ngay_sinh = ngay_sinh
-        existing_student.std = std
-        existing_student.gioi_tinh = gioi_tinh
-        existing_student.dia_chi = dia_chi
-        existing_student.mail = mail
-        db.session.commit()  # Lưu lại thay đổi vào cơ sở dữ liệu
-        return "Thông tin học sinh đã được cập nhật."
-    else:
-        # Nếu học sinh chưa tồn tại, thêm mới học sinh
-        add = HocSinh(ma_hoc_sinh=ma_hoc_sinh, ho_ten=ho_ten, ngay_sinh=ngay_sinh,
-                      gioi_tinh=gioi_tinh, std=std, dia_chi=dia_chi, mail=mail)
-        db.session.add(add)
-        db.session.commit()  # Lưu học sinh mới vào cơ sở dữ liệu
-        return "Học sinh đã được thêm mới."
-
+	existing_student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
+	if existing_student:
+		# Nếu học sinh đã tồn tại, cập nhật những trường thay đổi
+		existing_student.ho_ten = ho_ten
+		existing_student.ngay_sinh = ngay_sinh
+		existing_student.std = std
+		existing_student.gioi_tinh = gioi_tinh
+		existing_student.dia_chi = dia_chi
+		existing_student.mail = mail
+		db.session.commit()  # Lưu lại thay đổi vào cơ sở dữ liệu
+		return "Thông tin học sinh đã được cập nhật."
+	else:
+		# Nếu học sinh chưa tồn tại, thêm mới học sinh
+		add = HocSinh(ma_hoc_sinh=ma_hoc_sinh, ho_ten=ho_ten, ngay_sinh=ngay_sinh,
+					  gioi_tinh=gioi_tinh, std=std, dia_chi=dia_chi, mail=mail)
+		db.session.add(add)
+		db.session.commit()  # Lưu học sinh mới vào cơ sở dữ liệu
+		return "Học sinh đã được thêm mới."
 
 
 # tạo một lớp học mới
 def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
-    existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
+	existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
 
-    if existing_class:
-        # Nếu ma_lop đã tồn tại, cập nhật nội dung
-        existing_class.so_luong = so_luong
-        existing_class.ten = ten
-        existing_class.khoi_id = khoi_id
-        existing_class.giang_vien_id = giang_vien_id
-        print(f"Đã cập nhật lớp học với mã lớp: {malop}")
-    else:
+	if existing_class:
+		# Nếu ma_lop đã tồn tại, cập nhật nội dung
+		existing_class.so_luong = so_luong
+		existing_class.ten = ten
+		existing_class.khoi_id = khoi_id
+		existing_class.giang_vien_id = giang_vien_id
+		print(f"Đã cập nhật lớp học với mã lớp: {malop}")
+	else:
 
-        new_class = LopHoc(ma_lop=malop, so_luong=so_luong, ten=ten, khoi_id=khoi_id, giang_vien_id=giang_vien_id)
-        db.session.add(new_class)
-        print(f"Đã thêm lớp học mới với mã lớp: {malop}")
+		new_class = LopHoc(ma_lop=malop, so_luong=so_luong, ten=ten, khoi_id=khoi_id,
+						   giang_vien_id=giang_vien_id)
+		db.session.add(new_class)
+		print(f"Đã thêm lớp học mới với mã lớp: {malop}")
 
-    db.session.commit()
+	db.session.commit()
 
 
 # Lấy tất cả giảng viên ra
 def get_teacher():
 	tech = User.query.filter(User.user_role == "TEACH").all()
 	result = [
-			{
-				"ho_ten": tech__.ho_ten,
-				"ma_nhan_vien": tech__.ma_nhan_vien,
-				# Các cột khác nếu có...
-			}
-			for tech__ in tech
-		]
+		{
+			"ho_ten": tech__.ho_ten,
+			"ma_nhan_vien": tech__.ma_nhan_vien,
+			# Các cột khác nếu có...
+		}
+		for tech__ in tech
+	]
 	return result
 
 
@@ -106,16 +106,17 @@ def get_students_no_Class():
 	students = HocSinh.getStudents_no_Class()
 	return students
 
+
 def remote_students(ma_hoc_sinh):
 	student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
 	if student:
 		db.session.delete(student)
 		db.session.commit()
 
+
 def get_khoi():
 	khoi__ = Khoi.query.all()
 	return khoi__
-
 
 
 # tra ve hoc sinh theo id lop ho da co san
@@ -123,29 +124,69 @@ def get_stdents_in_class(class_id):
 	students_in_class = HocSinh.get_students_in_class(class_id)
 	return students_in_class
 
+
 def remote_class(ma_lop):
-	class__ =  LopHoc.query.filter_by(ma_lop=ma_lop).first()
+	class__ = LopHoc.query.filter_by(ma_lop=ma_lop).first()
 	if class__:
 		db.session.delete(class__)
 		db.session.commit()
+
+
+def get_khoi_name(khoi_id):
+	khoi__ = Khoi.query.filter_by(id=khoi_id).first()
+	if khoi__:
+		return khoi__.ten
+	return None
+
+
+def get_giang_vien_name(giang_vien_id):
+	tech = User.query.filter_by(ma_nhan_vien=giang_vien_id).first()
+	if tech:
+		return tech.ho_ten
+	return None
+
 
 # lay tat ca cac lop hoc da duoc tao ra
 def get_class():
 	class_id = LopHoc.query.all()
 	result = [
-			{
-				"ma_lop": _class.ma_lop,
-				"so_luong":_class.so_luong,
-				"ten": _class.ten,
-				"khoi_id": _class.khoi_id,
-				"giang_vien_id":_class.giang_vien_id
-			}
-			for _class in class_id
-		]
+		{
+			"ma_lop": _class.ma_lop,
+			"so_luong": _class.so_luong,
+			"ten": _class.ten,
+			"khoi_id": _class.khoi_id,
+			"giang_vien_id": _class.giang_vien_id
+		}
+		for _class in class_id
+	]
 	return result
 
-#api lấy và lưu dữ liệu cho phần nhập điểm
 
+def get_classes_info():
+	classes = db.session.query(
+		LopHoc.ma_lop,
+		LopHoc.ten,
+		LopHoc.so_luong,
+		Khoi.ten.label('ten_khoi'),
+		User.ho_ten.label('ten_giang_vien')
+	).join(Khoi, LopHoc.khoi_id == Khoi.id).join(
+		User, LopHoc.giang_vien_id == User.ma_nhan_vien
+	).all()
+
+	result = []
+	for _class in classes:
+		result.append({
+			"ma_lop": _class.ma_lop,
+			"ten": _class.ten,
+			"so_luong": _class.so_luong,
+			"ten_khoi": _class.ten_khoi,
+			"ten_giang_vien": _class.ten_giang_vien
+		})
+
+	return result
+
+
+# api lấy và lưu dữ liệu cho phần nhập điểm
 
 
 def get_user_by_id(ma_nhan_vien):
@@ -155,6 +196,25 @@ def get_user_by_id(ma_nhan_vien):
 def get_students_by_year(semester_name, year):
 	students = HocSinh.get_students_in_class(semester_name, year)
 	return students
+
+#
+# def get_students_by_year(semester_name, year, class_name):
+# 	students = db.session.query(HocSinh.ma_hoc_sinh, HocSinh.ho_ten).join(
+# 		Hoc, Hoc.hoc_sinh_id == HocSinh.ma_hoc_sinh).join(
+# 		LopHoc, Hoc.lop_hoc_id == LopHoc.ma_lop).join(
+# 		HocKy, Hoc.hoc_ky_id == HocKy.id).filter(
+# 		LopHoc.ten == class_name,
+# 		HocKy.ten == semester_name,
+# 		HocKy.nam_hoc == year
+# 	).all()
+#
+# 	return [
+# 		{
+# 			"ma_hoc_sinh": student.ma_hoc_sinh,
+# 			"ho_ten": student.ho_ten,
+# 		}
+# 		for student in students
+# 	]
 
 
 # Hàm lấy điểm của học sinh theo tên lớp, tên học kỳ, năm học và tên môn học
@@ -262,9 +322,3 @@ def course_report(course, year, semester):
 		for statis in statis
 	]
 
-
-# Chạy thử các hàm
-if __name__ == '__main__':
-	with app.app_context():
-		res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
-		print(res)

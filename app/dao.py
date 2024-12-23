@@ -101,6 +101,36 @@ def add_hoc(class_id, student_id):
 	db.session.commit()
 
 
+def update_student_class(ma_hoc_sinh, lop_hoc_id):
+    try:
+        # Tìm học sinh trong cơ sở dữ liệu
+        student = HocSinh.query.filter_by(ma_hoc_sinh=ma_hoc_sinh).first()
+
+        if student:
+            # Nếu tồn tại, cập nhật 'lop_hoc_id'
+            student.lop_hoc_id = lop_hoc_id
+            db.session.commit()
+            print(f"Updated student {ma_hoc_sinh} to class {lop_hoc_id}")
+        else:
+            # Nếu không tồn tại, in thông báo lỗi (hoặc thêm mới nếu cần)
+            print(f"Student with ma_hoc_sinh={ma_hoc_sinh} not found in database.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating student {ma_hoc_sinh} to class {lop_hoc_id}: {e}")
+        raise e
+
+
+def get_students_by_class(class_id):
+    try:
+        # Lấy danh sách học sinh theo lop_hoc_id
+        students = HocSinh.query.filter_by(lop_hoc_id=class_id).join(LopHoc).all()
+        return students
+    except Exception as e:
+        print(f"Error fetching students for class {class_id}: {e}")
+        raise e
+
+
+
 # lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
 def get_students_no_Class():
 	students = HocSinh.getStudents_no_Class()

@@ -153,6 +153,131 @@ def add_hoc():
 	
 	return jsonify({"error": "No data provided"}), 400	
 
+
+@app.route("/api/update_student_class", methods=['POST'])
+def update_student_class():
+    try:
+        # Lấy dữ liệu từ request
+        data = request.get_json()
+        print("Payload received in Flask:", data)
+
+        # Kiểm tra payload hợp lệ
+        if not data or "data" not in data or not isinstance(data["data"], list):
+            return jsonify({"error": "Invalid or missing payload. 'data' must be a list."}), 400
+
+        # Lặp qua từng học sinh để thêm/cập nhật
+        for student in data["data"]:
+            if "ma_hoc_sinh" not in student or "lop_hoc_id" not in student:
+                return jsonify({
+                    "error": "Each student entry must include 'ma_hoc_sinh' and 'lop_hoc_id'."
+                }), 400
+
+            # Gọi hàm DAO để thêm/cập nhật
+            dao.update_student_class(student["ma_hoc_sinh"], student["lop_hoc_id"])
+
+        return jsonify({"message": "Students updated successfully"}), 200
+
+    except Exception as e:
+        print("Error in update_student_class:", e)
+        return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
+
+
+@app.route("/api/get_students_by_class", methods=['POST'])
+def get_students_by_class():
+    # Lấy dữ liệu từ request
+    data = request.get_json()
+    print("data===>", data)
+
+    # Kiểm tra nếu có dữ liệu 'data' trong request hay không
+    if "data" in data and data["data"] is not None:
+        data = data["data"]
+        
+        # Lấy class_id từ dữ liệu
+        class_id = data[0]["class_id"]
+
+        try:
+            # Gọi phương thức từ dao để lấy danh sách học sinh theo class_id
+            students = dao.get_students_by_class(class_id)
+
+            # Chuyển dữ liệu thành dạng JSON và trả về
+            students_data = [{
+                'ma_hoc_sinh': student.ma_hoc_sinh,
+                'ho_ten': student.ho_ten,
+                'gioi_tinh': student.gioi_tinh,
+                'ngay_sinh': student.ngay_sinh.strftime('%Y-%m-%d'),  # Định dạng ngày sinh
+                'dia_chi': student.dia_chi,
+                'lop_hoc_id': student.lop_hoc_id
+            } for student in students]
+            
+            return jsonify({"message": "Students fetched successfully", "data": students_data}), 200
+
+        except Exception as e:
+            return jsonify({"error": "Failed to fetch students", "details": str(e)}), 500
+    
+    return jsonify({"error": "No class_id provided"}), 400
+
+
+
+
+@app.route('/api/get_student_scores', methods=['POST'])
+def get_student_scores():
+    data = request.json
+    class_input = data.get('class')
+    student_name = data.get('name', "").strip()
+    academic_year = data.get('year')
+
+    # Giả sử có một hàm get_scores_from_db lấy dữ liệu từ database
+    scores = get_scores_from_db(class_input, academic_year, student_name)
+
+    if not scores:
+        return jsonify({"success": False, "message": "Không tìm thấy học sinh nào."})
+
+    # Tính điểm trung bình
+    for student in scores:
+        student['averageHK1'] = calculate_average(student['scoresHK1'])
+        student['averageHK2'] = calculate_average(student['scoresHK2'])
+
+    return jsonify({"success": True, "scores": scores})
+
+def calculate_average(scores):
+    total_points = 0
+    total_weights = 0
+
+    for score_type, weight in [('15p', 1), ('45p', 2), ('final', 3)]:
+        for score in scores.get(score_type, []):
+            total_points += score * weight
+            total_weights += weight
+
+    return round(total_points / total_weights, 2) if total_weights > 0 else 0
+
+def get_scores_from_db(class_input, academic_year, student_name):
+    # Ví dụ dữ liệu giả lập
+    students = [
+        {
+            "name": "Nguyễn Văn A",
+            "class": "10A",
+			"academic_year": "2022-2023",
+            "scoresHK1": {
+                "15p": [8, 7, 9],
+                "45p": [8, 9],
+                "final": [9],
+            },
+            "scoresHK2": {
+                "15p": [7, 6],
+                "45p": [7, 8],
+                "final": [8],
+            }
+        }
+    ]
+
+    filtered_students = [
+        s for s in students
+        if s['class'] == class_input and
+        (not student_name or student_name.lower() in s['name'].lower())
+    ]
+
+    return filtered_students
+
 # load trang admin
 # @app.route("/login-admin", methods=['post'])
 # def login_admin_process():

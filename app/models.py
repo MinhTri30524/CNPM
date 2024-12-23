@@ -156,6 +156,7 @@ class Khoi(db.Model):
 	id = Column(Integer, primary_key=True)
 	ten = Column(String(100), nullable=False)
 	lops = relationship('LopHoc', backref='khoi', lazy=True)
+	de_cuong_mon_hocs = relationship('DeCuongMonHoc', backref='khoi', lazy=True)
 
 
 # Lớp Học
@@ -175,6 +176,7 @@ class MonHoc(db.Model):
 	ten = Column(String(100), nullable=False)
 	so_tiet = Column(Integer, nullable=False)
 	hocs = relationship('Hoc', backref='mon_hoc', lazy=True)
+	de_cuong_mon_hocs = relationship('DeCuongMonHoc', backref='mon_hoc', lazy=True)
 
 	def __str__(self):
 		return self.ten
@@ -200,6 +202,15 @@ class HocKy(db.Model):
 
 	def __str__(self):
 		return self.ten
+
+
+# Lớp Đề Cương Môn Học
+class DeCuongMonHoc(db.Model):
+	__tablename__ = 'de_cuong_mon_hoc'
+	khoi_id = Column(Integer, ForeignKey('khoi.id'), primary_key=True)
+	mon_hoc_id = Column(Integer, ForeignKey('mon_hoc.ma_mon'), primary_key=True)
+	loai_diem = Column(Enum(LoaiDiemEnum), primary_key=True)
+	so_cot = Column(Integer, nullable=False)
 
 
 if __name__ == '__main__':

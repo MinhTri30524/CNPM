@@ -5,8 +5,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user, logout_user
 
 from app import db, app
-from app.dao import course_report
-from app.models import HocSinh, UserRole
+from app.dao import course_report, get_class, get_classes_info
+from app.models import HocSinh, UserRole, LopHoc
 
 
 class MyAdminIndexView(AdminIndexView):
@@ -34,25 +34,32 @@ class AuthenticatedView(ModelView):
 		return current_user.is_authenticated and current_user.user_role.__eq__(UserRole.ADMIN)
 
 
-class CategoryView(AuthenticatedView):
-	can_export = True
-	column_searchable_list = ['id', 'name']
-	column_filters = ['id', 'name']
-	can_view_details = True
-	column_list = ['name', 'products']
-
-
-class StudentView(AuthenticatedView):
-	can_export = True
-	column_searchable_list = ['ma_hoc_sinh', 'ma_hoc_sinh']
-	column_filters = ['ma_hoc_sinh', 'ho_ten']
-	can_view_details = True
-	column_list = ['ma_hoc_sinh', 'ho_ten', 'ngay_sinh', 'std']
-
-
 class MyView(BaseView):
 	def is_accessible(self):
 		return current_user.is_authenticated
+
+
+# class ClassView(MyView):
+# 	@expose("/")
+# 	def index(self):
+# 		classes = get_classes_info()
+# 		return self.render('admin/class.html', classes=classes)
+
+
+class ClassView(AuthenticatedView):
+	can_export = True
+	column_searchable_list = ['ma_lop', 'ten']
+	column_filters = ['ma_lop', 'ten']
+	can_view_details = True
+	column_list = ['ma_lop', 'ten', 'so_luong']
+
+
+class CourseOutlineView(AuthenticatedView):
+	can_export = True
+	column_searchable_list = ['ma_lop', 'ten']
+	column_filters = ['ma_lop', 'ten']
+	can_view_details = True
+	column_list = ['ma_lop', 'ten', 'so_luong']
 
 
 class LogoutView(MyView):
@@ -68,5 +75,5 @@ class StatsView(MyView):
 		return self.render('admin/stats.html')
 
 
-admin.add_view(StudentView(HocSinh, db.session))
+admin.add_view(ClassView(name='Danh sách lớp', model=LopHoc, session=db.session))
 admin.add_view(LogoutView(name='Đăng xuất'))

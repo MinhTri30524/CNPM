@@ -27,6 +27,7 @@ function handleAddToClass(studentId) {
     })
         .then(response => response.json())
         .then(data => {
+            alert("Phản hồi từ server: " + JSON.stringify(data));
             console.log("Dữ liệu trả về từ server:", data);
             if (data.message === 'add_hoc added successfully') {
                 // Xóa học sinh khỏi bảng "Chưa Có Lớp"
@@ -113,3 +114,55 @@ function GetClass(classId) {
 }
 
 
+function handleSearchStudent() {
+    const classInput = document.querySelector('.class-input').value.trim();
+    const studentNameInput = document.querySelector('.student-name-input').value.trim();
+    const academicYear = document.querySelector('.academic-year-select').value;
+
+    if (!academicYear || !classInput) {
+        alert("Vui lòng chọn năm học và nhập lớp!");
+        return;
+    }
+
+    // Gửi yêu cầu đến server
+    fetch('/api/get_student_scores', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            class: classInput,
+            name: studentNameInput,
+            year: academicYear,
+        }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Kết quả:", data);
+
+            if (data.success) {
+                const tableBody = document.querySelector('.score-table-body');
+                tableBody.innerHTML = ''; // Xóa các hàng cũ
+
+                // Thêm từng dòng điểm vào bảng
+                data.scores.forEach((student, index) => {
+                    const row = `
+                        <tr>
+                            <td class="border px-4 py-2">${index + 1}</td>
+                            <td class="border px-4 py-2">${student.name}</td>
+                            <td class="border px-4 py-2">${student.class}</td>
+                            <td class="border px-4 py-2">${student.averageHK1}</td>
+                            <td class="border px-4 py-2">${student.averageHK2}</td>
+                        </tr>
+                    `;
+                    tableBody.innerHTML += row;
+                });
+            } else {
+                alert("Không tìm thấy dữ liệu phù hợp.");
+            }
+        })
+        .catch(error => {
+            console.error('Lỗi:', error);
+            alert("Không thể lấy dữ liệu học sinh. Vui lòng thử lại!");
+        });
+}

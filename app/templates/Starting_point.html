@@ -25,34 +25,32 @@
                     </select>
                 </div>
 
-                <!-- Nhập Tên Học Sinh -->
-                <div>
-                    <label class="block text-gray-700 font-bold mb-2">Tên học sinh:</label>
-                    <input type="text" placeholder="Nguyễn Văn A"
-                        class="student-name-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-                </div>
-
                 <!-- Nhập Lớp -->
                 <div>
                     <label class="block text-gray-700 font-bold mb-2">Lớp:</label>
                     <input type="text" placeholder="10A"
                         class="class-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
                 </div>
-
-                <!-- Nút Xuất -->
-                <div class="col-span-2 flex justify-end">
-                    <button
-                        class="export-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        Xuất
-                    </button>
-                </div>
+            </div>
+            <!-- Nhập Tên Học Sinh -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">Tên học sinh:</label>
+                <input type="text" placeholder="Nguyễn Văn A"
+                    class="student-name-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <!-- Nút Tìm học sinh -->
+            <div class="col-span-2 flex justify-end">
+                <button onclick="handleSearchStudent()"
+                    class="export-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Tìm học sinh
+                </button>
             </div>
         </div>
 
         <!-- Bảng Điểm Trung Bình Lớp -->
         <div class="bg-white shadow-md rounded-lg p-6">
             <h2 class="font-bold text-gray-700 mb-4">Bảng Điểm Trung Bình Lớp</h2>
-            <table class="min-w-full border border-gray-300 text-gray-700">
+            <table class="min-w-full border border-gray-300 text-gray-700 mb-4">
                 <thead>
                     <tr class="bg-gray-100">
                         <th class="border px-4 py-2">STT</th>
@@ -66,6 +64,14 @@
                     <!-- Kết quả sẽ được thêm vào đây -->
                 </tbody>
             </table>
+
+            <!-- Nút Xuất -->
+            <div class="col-span-2 flex justify-end">
+                <button
+                    class="export-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Xuất
+                </button>
+            </div>
         </div>
     </div>
 </div>

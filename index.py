@@ -134,6 +134,66 @@ def add_hoc():
 	
 	return jsonify({"error": "No data provided"}), 400	
 
+
+@app.route('/api/get_student_scores', methods=['POST'])
+def get_student_scores():
+    data = request.json
+    class_input = data.get('class')
+    student_name = data.get('name', "").strip()
+    academic_year = data.get('year')
+
+    # Giả sử có một hàm get_scores_from_db lấy dữ liệu từ database
+    scores = get_scores_from_db(class_input, academic_year, student_name)
+
+    if not scores:
+        return jsonify({"success": False, "message": "Không tìm thấy học sinh nào."})
+
+    # Tính điểm trung bình
+    for student in scores:
+        student['averageHK1'] = calculate_average(student['scoresHK1'])
+        student['averageHK2'] = calculate_average(student['scoresHK2'])
+
+    return jsonify({"success": True, "scores": scores})
+
+def calculate_average(scores):
+    total_points = 0
+    total_weights = 0
+
+    for score_type, weight in [('15p', 1), ('45p', 2), ('final', 3)]:
+        for score in scores.get(score_type, []):
+            total_points += score * weight
+            total_weights += weight
+
+    return round(total_points / total_weights, 2) if total_weights > 0 else 0
+
+def get_scores_from_db(class_input, academic_year, student_name):
+    # Ví dụ dữ liệu giả lập
+    students = [
+        {
+            "name": "Nguyễn Văn A",
+            "class": "10A",
+			"academic_year": "2022-2023",
+            "scoresHK1": {
+                "15p": [8, 7, 9],
+                "45p": [8, 9],
+                "final": [9],
+            },
+            "scoresHK2": {
+                "15p": [7, 6],
+                "45p": [7, 8],
+                "final": [8],
+            }
+        }
+    ]
+
+    filtered_students = [
+        s for s in students
+        if s['class'] == class_input and
+        (not student_name or student_name.lower() in s['name'].lower())
+    ]
+
+    return filtered_students
+
 # load trang admin
 # @app.route("/login-admin", methods=['post'])
 # def login_admin_process():

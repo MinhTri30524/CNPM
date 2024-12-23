@@ -4,6 +4,7 @@ import cloudinary.uploader
 
 from app import db, app
 from app.models import User, HocSinh, GiangVien, LopHoc, Diem, Hoc, HocKy, MonHoc, Khoi
+from collections import defaultdict
 
 
 # lấy user đó ra
@@ -116,6 +117,12 @@ def get_khoi():
 	khoi__ = Khoi.query.all()
 	return khoi__
 
+def get_hocKy():
+    # Lấy tất cả các giá trị từ cơ sở dữ liệu, nhóm theo `nam_hoc`
+	hocky__ = HocKy.query.all()
+	return hocky__
+    
+    
 
 
 # tra ve hoc sinh theo id lop ho da co san
@@ -146,7 +153,9 @@ def get_class():
 
 #api lấy và lưu dữ liệu cho phần nhập điểm
 
-
+def get_monHoc():
+	monhoc__ = MonHoc.query.all()
+	return monhoc__
 
 def get_user_by_id(ma_nhan_vien):
 	return User.query.get(ma_nhan_vien)
@@ -154,6 +163,12 @@ def get_user_by_id(ma_nhan_vien):
 
 def get_students_by_year(semester_name, year):
 	students = HocSinh.get_students_in_class(semester_name, year)
+	return students
+
+
+
+def get_students_by_year(semester_name, year, class_id):
+	students = HocSinh.get_students_in_class(semester_name, year, class_id)
 	return students
 
 
@@ -266,5 +281,6 @@ def course_report(course, year, semester):
 # Chạy thử các hàm
 if __name__ == '__main__':
 	with app.app_context():
-		res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
-		print(res)
+		# res = get_student_scores("10A1", "Học kỳ 1", "2023-2024", "Toán")
+		repr__ = get_hocKy()
+		print(repr__)

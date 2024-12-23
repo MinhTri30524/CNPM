@@ -191,7 +191,11 @@ def Make_class_list():
 # load trang nhập điểm
 @app.route('/Enter_score')
 def Enter_score():
-	return render_template('Enter_score.html')
+	class__ = dao.get_class()
+	hocky = dao.get_hocKy()
+	monhoc = dao.get_monHoc()
+	
+	return render_template('Enter_score.html', class__ = class__, hocky = hocky,monhoc=monhoc)
 
 
 # Load trang xuất điểm

@@ -36,6 +36,22 @@ def add_user(id, name, username, password, avatar):
 	db.session.commit()
 
 
+#lấy tất cả mã trong học ra khi chưa có mã môn học
+def ma_hoc(lop_hoc_id_value):
+	result = db.session.query(Hoc.ma_hoc, Hoc.hoc_sinh_id).filter(
+    Hoc.lop_hoc_id == lop_hoc_id_value,
+    Hoc.mon_hoc_id == None).all()
+
+	result = [
+		{
+			"ma_hoc": hoc__.ma_hoc,
+			"hoc_sinh_id": hoc__.hoc_sinh_id,
+			# Các cột khác nếu có...
+		}
+		for hoc__ in result
+	]
+	return result
+
 # thêm một học sinh mới
 def add_student(ma_hoc_sinh, ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
 	# Kiểm tra xem học sinh đã tồn tại trong cơ sở dữ liệu chưa
@@ -101,6 +117,13 @@ def add_hoc(class_id, student_id):
 	db.session.commit()
 
 
+# def lưu điểum môn học cho từng học sinh
+def add_diem(loai_diem, diem, hoc_ky_id, hoc_id):
+	add = Diem(loai_diem=loai_diem,diem=diem,hoc_ky_id=hoc_ky_id,hoc_id=hoc_id)
+	db.session.add(add)
+	db.session.commit()
+
+
 # lấy tất cả học sinh đã đã đang ký nhập học chưa có id mã lóp
 def get_students_no_Class():
 	students = HocSinh.getStudents_no_Class()
@@ -131,6 +154,13 @@ def remote_class(ma_lop):
 		db.session.delete(class__)
 		db.session.commit()
 
+def get_monHoc():
+	monhoc__ = MonHoc.query.all()
+	return monhoc__
+
+def get_hocky():
+	hocky__ = HocKy.query.all()
+	return hocky__
 
 def get_khoi_name(khoi_id):
 	khoi__ = Khoi.query.filter_by(id=khoi_id).first()

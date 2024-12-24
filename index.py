@@ -110,6 +110,32 @@ def remote_student():
 	return jsonify({"error": "No data provided"}), 400
 
 
+@app.route("/api/add_diem", methods=['POST'])
+def add_diem():
+	data = request.get_json()
+	hocky_id = data["hoc_ky_id"]
+	if "data" in data and data["data"] is not None:
+		data = data["data"]
+		for i in data:
+			for j in i["1"]:
+				dao.add_diem("1",j,hocky_id,1)
+			for k in i["2"]:
+				dao.add_diem("2",k,hocky_id,1)
+			for m in i["3"]:
+				dao.add_diem("3",m,hocky_id,1)
+		return jsonify({"message": "Student added successfully", "data": data}), 201
+	
+	return jsonify({"error": "No data provided"}), 400
+
+@app.route("/api/get_hoc",methods=['POST'])
+def get_hoc():
+	data = request.get_json()
+	data = data["lop_hoc_id"]
+	stu = dao.ma_hoc(data)
+	return jsonify({"message": "Student added successfully", "data": stu}), 201
+	# return jsonify({"error": "No data provided"}), 400
+
+
 
 @app.route("/api/add_class", methods=['POST'])
 def add_class():
@@ -192,9 +218,8 @@ def Make_class_list():
 @app.route('/Enter_score')
 def Enter_score():
 	class__ = dao.get_class()
-	hocky = dao.get_hocKy()
+	hocky = dao.get_hocky()
 	monhoc = dao.get_monHoc()
-	
 	return render_template('Enter_score.html', class__ = class__, hocky = hocky,monhoc=monhoc)
 
 

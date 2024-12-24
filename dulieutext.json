@@ -1,0 +1,98 @@
+[
+    {
+        "dia_chi": "123 Nguyen Trai, Ho Chi Minh City",
+        "gioi_tinh": "Nam",
+        "ho_ten": "Nguyen Hoang Nam",
+        "ma_hoc_sinh": 1,
+        "mail": "nam.nguyen@example.com",
+        "ngay_sinh": "2005-10-15"
+    },
+    {
+        "dia_chi": "45 Le Loi, Hanoi",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "Tran Thi Mai",
+        "ma_hoc_sinh": 2,
+        "mail": "mai.tran@example.com",
+        "ngay_sinh": "2006-02-20"
+    },
+    {
+        "dia_chi": "78 Dao Duy Anh, Da Nang",
+        "gioi_tinh": "Nam",
+        "ho_ten": "Le Minh Tu",
+        "ma_hoc_sinh": 3,
+        "mail": "tu.le@example.com",
+        "ngay_sinh": "2005-07-30"
+    },
+    {
+        "dia_chi": "56 Hung Vuong, Hai Phong",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "Pham Thi Lan",
+        "ma_hoc_sinh": 4,
+        "mail": "lan.pham@example.com",
+        "ngay_sinh": "2007-05-12"
+    },
+    {
+        "dia_chi": "34 Nguyen Du, Can Tho",
+        "gioi_tinh": "Nam",
+        "ho_ten": "Hoang Bao Trung",
+        "ma_hoc_sinh": 5,
+        "mail": "trung.hoang@example.com",
+        "ngay_sinh": "2006-11-25"
+    },
+    {
+        "dia_chi": "123 Nguyen Trai, Ho Chi Minh City",
+        "gioi_tinh": "Nam",
+        "ho_ten": "Nguyen Phúc Tấn",
+        "ma_hoc_sinh": 6,
+        "mail": "nam.nguyen@example.com",
+        "ngay_sinh": "2005-10-15"
+    },
+    {
+        "dia_chi": "123 Nguyen Trai, Ho Chi Minh City",
+        "gioi_tinh": "Nam",
+        "ho_ten": "Nguyen Hoang Nam",
+        "ma_hoc_sinh": 7,
+        "mail": "nam.nguyen@example.com",
+        "ngay_sinh": "2005-10-15"
+    },
+    {
+        "dia_chi": "1234",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "123",
+        "ma_hoc_sinh": 20,
+        "mail": "12341234",
+        "ngay_sinh": "4444-03-12"
+    },
+    {
+        "dia_chi": "1234",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "123",
+        "ma_hoc_sinh": 21,
+        "mail": "1234",
+        "ngay_sinh": "0004-03-12"
+    },
+    {
+        "dia_chi": "1234",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "1",
+        "ma_hoc_sinh": 22,
+        "mail": "1234",
+        "ngay_sinh": "0324-03-12"
+    },
+    {
+        "dia_chi": "1234",
+        "gioi_tinh": "Nữ",
+        "ho_ten": "1234",
+        "ma_hoc_sinh": 23,
+        "mail": "1234",
+        "ngay_sinh": "3333-03-12"
+    },
+    {
+        "ho_ten": "1",
+        "ngay_sinh": "4444-03-12",
+        "std": "1234",
+        "gioi_tinh": "Nữ",
+        "dia_chi": "1234",
+        "mail": "12341234"
+    }
+]

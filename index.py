@@ -123,8 +123,10 @@ def add_diem():
 				a = dao.get_ma_hoc(lop_hoc_id,j["dataId"],mon_hoc_id)
 				dao.add_diem("1",j["value"],hocky_id,a)
 			for k in i["2"]:
+				a = dao.get_ma_hoc(lop_hoc_id,k["dataId"],mon_hoc_id)
 				dao.add_diem("2",k["value"],hocky_id,a)
 			for m in i["3"]:
+				a = dao.get_ma_hoc(lop_hoc_id,m["dataId"],mon_hoc_id)
 				dao.add_diem("3",m["value"],hocky_id,a)
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	

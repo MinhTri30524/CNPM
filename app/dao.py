@@ -75,6 +75,7 @@ def add_student(ma_hoc_sinh, ho_ten, ngay_sinh, std, gioi_tinh, dia_chi, mail):
 		return "Học sinh đã được thêm mới."
 
 
+
 # tạo một lớp học mới
 def add_class_student(malop, so_luong, ten, khoi_id, giang_vien_id):
 	existing_class = LopHoc.query.filter_by(ma_lop=malop).first()
@@ -111,8 +112,8 @@ def get_teacher():
 
 
 # add hoc thanh lap lop tu nhan vien tao
-def add_hoc(class_id, student_id):
-	add = Hoc(lop_hoc_id=class_id, hoc_sinh_id=student_id)
+def add_hoc(class_id, student_id, mon_hoc_id):
+	add = Hoc(lop_hoc_id=class_id, hoc_sinh_id=student_id, mon_hoc_id=mon_hoc_id)
 	db.session.add(add)
 	db.session.commit()
 
@@ -245,7 +246,14 @@ def get_classes_info():
 	return result
 
 
-# api lấy và lưu dữ liệu cho phần nhập điểm
+# api lấy dữu liệu cho ma_hoc
+def get_ma_hoc(lop_hoc_id, hoc_sinh_id, mon_hoc_id):
+    ma_hoc = db.session.query(Hoc.ma_hoc).filter(
+        Hoc.lop_hoc_id == lop_hoc_id,
+        Hoc.hoc_sinh_id == hoc_sinh_id,
+        Hoc.mon_hoc_id == mon_hoc_id
+    ).first()  # Lấy giá trị đầu tiên nếu có, hoặc None nếu không có kết quả scalar()
+    return ma_hoc[0] if ma_hoc else None
 
 
 def get_user_by_id(ma_nhan_vien):

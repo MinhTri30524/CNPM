@@ -114,15 +114,18 @@ def remote_student():
 def add_diem():
 	data = request.get_json()
 	hocky_id = data["hoc_ky_id"]
+	lop_hoc_id = data["lop_hoc_id"]
+	mon_hoc_id = data["mon_hoc_id"]
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
 		for i in data:
 			for j in i["1"]:
-				dao.add_diem("1",j,hocky_id,1)
+				a = dao.get_ma_hoc(lop_hoc_id,j["dataId"],mon_hoc_id)
+				dao.add_diem("1",j["value"],hocky_id,a)
 			for k in i["2"]:
-				dao.add_diem("2",k,hocky_id,1)
+				dao.add_diem("2",k["value"],hocky_id,a)
 			for m in i["3"]:
-				dao.add_diem("3",m,hocky_id,1)
+				dao.add_diem("3",m["value"],hocky_id,a)
 		return jsonify({"message": "Student added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400
@@ -170,11 +173,14 @@ def remote_class():
 def add_hoc():
     # Lấy dữ liệu từ request
 	data = request.get_json()
-	print("data===>",data)
+	data__ = data["data"]
+	lop_hoc_id = data["lop_hoc_id"]
+	mon_hoc_id = data["mon_hoc_id"]
+	# print("data===>",data)
 	if "data" in data and data["data"] is not None:
 		data = data["data"]
-		for hoc__ in data:
-			dao.add_hoc(hoc__["class_id"],hoc__["student_id"])
+		for id in data__:
+			dao.add_hoc(lop_hoc_id,id,mon_hoc_id)
 		return jsonify({"message": "add_hoc added successfully", "data": data}), 201
 	
 	return jsonify({"error": "No data provided"}), 400	

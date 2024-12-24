@@ -95,21 +95,19 @@
 
     const selectElement = document.getElementById('academicYearSelect');
     let selectedValue = ""; // Khai báo biến toàn cục
-
     selectElement.addEventListener('change', function () {
         selectedValue = this.value; // Cập nhật giá trị
     });
 
     const selectCls = document.getElementById('select_cls');
+
+
     const selectSubjeck = document.getElementById('monhoc');
-
+    let Value_selectSubjeck = ""
     selectSubjeck.addEventListener('change', function () {
-        const selectedValue_subjec = parseInt(selectSubjeck.value) || 0;
-
-        alert('Giá trị đã chọn là: ' + selectedValue_subjec);
-
-
+        Value_selectSubjeck = this.value
     })
+
 
     selectCls.addEventListener('change', function () {
         // Lấy giá trị đã chọn
@@ -130,10 +128,10 @@
             return response.json();
         }).then(data => {
             data = data["data"]
-            console.log("dataaaaaaa=====>",data)
+
         })
 
-        
+
     });
 
     // Bạn có thể sử dụng selectedValue ở nơi khác sau khi người dùng chọn
@@ -150,6 +148,11 @@
 
         const columnSelector1t = document.getElementById('columnSelector1t');
         const Value_1t = parseInt(columnSelector1t.value) || 0;
+
+
+
+
+
 
         // alert("Value_1t" + Value_1t)
         // alert("Value_15p" + Value_15p)
@@ -264,10 +267,17 @@
     });
 
     function getStudentScores() {
+        const selectSubjeck = document.getElementById('monhoc');
+        const Value_Subjeck = parseInt(selectSubjeck.value) || 0;
+
+        const selectCls__ = document.getElementById('select_cls');
+        const selectedValue__ = parseInt(selectCls__.value) || 0;
+
         const inputs = document.querySelectorAll('input[data-id][data-type]');
         const groupedData = {};
-
         // Duyệt qua các thẻ input
+        const arrryID = []
+
         inputs.forEach(input => {
             const dataId = input.getAttribute('data-id');
             const dataType = input.getAttribute('data-type');
@@ -284,16 +294,58 @@
             }
 
             // Thêm giá trị vào nhóm
-            groupedData[dataId][dataType].push(value);
+            // groupedData[dataId][dataType].push(value);
+            groupedData[dataId][dataType].push({
+                value: value,
+                dataId: dataId
+            });
+            // tạo một mảng lưu tất cả mã học sinh
+            if (!arrryID.includes(dataId)) {
+                arrryID.push(dataId);
+            }
 
         });
+
+        const save_hoc = {
+            key: "save_diem",
+            lop_hoc_id: selectedValue__,
+            mon_hoc_id: Value_Subjeck,
+            data: arrryID
+        };
+        console.log("arrryIDSavweeHOc===>", save_hoc)
+
+        fetch('/api/add_hoc', {
+            method: "POST",
+            body: JSON.stringify(save_hoc), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            return response.json();
+        }).then(data => {
+            alert("Phản hồi từ server: " + JSON.stringify(data));
+            // Xử lý kết quả trả về từ server (có thể reset mảng hoặc cập nhật giao diện)
+            arryAdd = []; // Reset mảng sau khi lưu thành công
+        })
+            .catch(error => {
+                console.error("Lỗi xảy ra:", error);
+                alert("Có lỗi xảy ra khi gửi dữ liệu.");
+            });
+
+
+
 
 
 
         const dataToSend = {
             key: "save_diem",
             data: Object.values(groupedData),
-            hoc_ky_id: selectedValue
+            hoc_ky_id: selectedValue,
+            lop_hoc_id: selectedValue__,
+            mon_hoc_id: Value_Subjeck
         };
         fetch('/api/add_diem', {
             method: "POST",
@@ -316,13 +368,16 @@
                 console.error("Lỗi xảy ra:", error);
                 alert("Có lỗi xảy ra khi gửi dữ liệu.");
             });
-        // console.log(groupedData);
+        console.log(Object.values(groupedData));
     }
 
     const ButtonSave = document.getElementById('saveButton');
     ButtonSave.addEventListener('click', () => {
         getStudentScores()
     })
+
+
+
 
 
 

@@ -107,13 +107,13 @@
         };
         
         //Xử lý một xíu giao diện
-        const exists = studentsArray.some(student => student.ma_hoc_sinh === studentData.ma_hoc_sinh);
+        const exists = studentsArray.some(student => student.ma_hoc_sinh === Number(studentData.ma_hoc_sinh));
         if (!exists) {
             // Nếu chưa tồn tại, thêm học sinh vào mảng
             studentsArray.push(studentData);
         } else {
             for (let i = 0; i < studentsArray.length; i++) {
-                if (studentsArray[i].ma_hoc_sinh == studentData.ma_hoc_sinh) {
+                if (studentsArray[i].ma_hoc_sinh == Number(studentData.ma_hoc_sinh)) {
                     console.log("studentsArray[i]", studentsArray[i])
                     studentsArray[i] = studentData
                 }

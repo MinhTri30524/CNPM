@@ -169,6 +169,7 @@ class Hoc(db.Model):
 	diems = relationship('Diem', backref='hoc', lazy=True)
 
 
+
 # Lớp Môn học
 class MonHoc(db.Model):
 	__tablename__ = 'mon_hoc'

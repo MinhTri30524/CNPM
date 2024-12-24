@@ -25,7 +25,12 @@ function handleClassSelection(selectElement) {
         },
         body: JSON.stringify(requestData) // Gửi dữ liệu lớp
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to add to hoc: " + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.message === 'Students fetched successfully') {
                 // Hiển thị danh sách học sinh trong lớp
@@ -62,48 +67,22 @@ function handleAddToClass(studentId) {
         return;
     }
 
-    // Gửi dữ liệu đến server để thêm học sinh vào bảng hoc
-    fetch('/api/add_hoc', {
+    // Payload cho API update_student_class
+    const updateStudentRequest = {
+        data: [{
+            "ma_hoc_sinh": studentId,
+            "lop_hoc_id": selectedClassId
+        }]
+    };
+
+    // Gửi yêu cầu để cập nhật bảng student
+    fetch('/api/update_student_class', {
         method: 'POST',
-        body: JSON.stringify({
-            key: "creat_hoc",
-            data: [{
-                "student_id": studentId,
-                "class_id": selectedClassId
-            }]
-        }),
+        body: JSON.stringify(updateStudentRequest),
         headers: {
             'Content-Type': 'application/json',
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Failed to add to hoc: " + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.message === 'add_hoc added successfully') {
-                // Payload cho API update_student_class
-                const updateStudentRequest = {
-                    data: [{
-                        "ma_hoc_sinh": studentId,
-                        "lop_hoc_id": selectedClassId
-                    }]
-                };
-
-                // Gửi tiếp yêu cầu để cập nhật bảng student
-                return fetch('/api/update_student_class', {
-                    method: 'POST',
-                    body: JSON.stringify(updateStudentRequest),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-            } else {
-                throw new Error("Lỗi khi thêm vào bảng hoc: " + JSON.stringify(data));
-            }
-        })
         .then(response => {
             if (!response.ok) {
                 throw new Error("Failed to update student class: " + response.statusText);
@@ -134,16 +113,17 @@ function handleAddToClass(studentId) {
 
                 studentsInClassTable.appendChild(newRow);
 
-                alert("Thêm học sinh vào lớp và cập nhật thành công!");
+                alert("Cập nhật học sinh vào lớp thành công!");
             } else {
                 throw new Error("Lỗi khi cập nhật bảng student: " + JSON.stringify(updateData));
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert("Không thể thêm học sinh vào lớp hoặc cập nhật thông tin. Vui lòng thử lại!");
+            alert("Không thể cập nhật thông tin học sinh. Vui lòng thử lại!");
         });
 }
+
 
 
 
@@ -246,4 +226,3 @@ function handleSearchStudent() {
             alert("Không thể lấy dữ liệu học sinh. Vui lòng thử lại!");
         });
 }
-

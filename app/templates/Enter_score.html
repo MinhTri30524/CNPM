@@ -4,238 +4,391 @@
 <div class="min-h-screen bg-gray-100 flex flex-col items-center pt-[100px]">
     <h1 class="text-xl font-bold text-gray-700 mb-6">Nhập điểm học sinh</h1>
     <!-- Danh sách học sinh -->
-    <!-- This is an example component -->
-    <div class="max-w-2xl mx-auto">
-
-        <div class="flex flex-col">
-            <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                <div class="inline-block min-w-full align-middle">
-                    <div class="overflow-hidden ">
-                        <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                            <thead class="bg-gray-100 dark:bg-gray-700">
-                                <tr>
-                                    <th scope="col" class="p-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-all" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-all" class="sr-only">checkbox</label>
-                                        </div>
-                                    </th>
-                                    <th scope="col"
-                                        class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Product Name
-                                    </th>
-                                    <th scope="col"
-                                        class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Category
-                                    </th>
-                                    <th scope="col"
-                                        class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                        Price
-                                    </th>
-                                    <th scope="col" class="p-4">
-                                        <span class="sr-only">Edit</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-1" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-1" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple Imac 27"</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                                        Desktop PC</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        $1999</td>
-                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-2" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-2" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple MacBook Pro 17"</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                                        Laptop</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        $2999</td>
-                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-3" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-3" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        iPhone 13 Pro</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                                        Phone</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        $999</td>
-                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-4" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-4" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple Magic Mouse 2</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                                        Accessories</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        $99</td>
-                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                    <td class="p-4 w-4">
-                                        <div class="flex items-center">
-                                            <input id="checkbox-table-5" type="checkbox"
-                                                class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                            <label for="checkbox-table-5" class="sr-only">checkbox</label>
-                                        </div>
-                                    </td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Apple Watch Series 7</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">
-                                        Accessories</td>
-                                    <td
-                                        class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        $599</td>
-                                    <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                        <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- Form Nhập Điểm -->
     <div class="bg-white shadow-md rounded-lg p-6 w-full max-w-4xl">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-3 gap-4">
             <!-- Năm học -->
             <div>
-                <label class="block text-gray-700 font-bold mb-2">Năm học:</label>
-                <select class="academic-year-select w-full px-4 py-2 border rounded-lg">
-                    <option value="">Chọn năm học</option>
-                    <option value="2023-2024">2023-2024</option>
-                    <option value="2024-2025">2024-2025</option>
+                <label class="block text-gray-700 font-bold mb-2">Chọn năm học - Học Kỳ</label>
+                <select id="academicYearSelect" class="academic-year-select w-full px-4 py-2 border rounded-lg">
+                    <option value="">Chọn năm học - Học Kỳ</option>
+                    {%for hocky in hocky %}
+                    <option value="{{hocky.id}}">{{hocky.nam_hoc}} - {{hocky.ten}}</option>
+                    {%endfor%}
+
                 </select>
             </div>
-
-            <!-- Học kỳ -->
-            <div>
-                <label class="block text-gray-700 font-bold mb-2">Học kỳ:</label>
-                <select class="semester-select w-full px-4 py-2 border rounded-lg">
-                    <option value="">Chọn học kỳ</option>
-                    <option value="1">Học kỳ 1</option>
-                    <option value="2">Học kỳ 2</option>
-                </select>
-            </div>
-
             <!-- Môn học -->
             <div>
                 <label class="block text-gray-700 font-bold mb-2">Môn học:</label>
-                <select class="subject-select w-full px-4 py-2 border rounded-lg">
+                <select id="monhoc" class="subject-select w-full px-4 py-2 border rounded-lg">
                     <option value="">Chọn môn học</option>
-                    <!-- Môn học sẽ được thêm vào đây từ backend -->
+                    {%for monhoc in monhoc %}
+                    <option value="{{monhoc.ma_mon}}">{{monhoc.ten}}</option>
+                    {%endfor%}
                 </select>
             </div>
 
             <!-- Chọn lớp -->
             <div>
                 <label class="block text-gray-700 font-bold mb-2">Lớp:</label>
-                <select class="class-select w-full px-4 py-2 border rounded-lg">
+                <select id="select_cls" class="class-select w-full px-4 py-2 border rounded-lg">
                     <option value="">Chọn lớp</option>
-                    {% for cls in classes %}
-                    <option value="{{ cls.id }}">{{ cls.name }}</option>
+                    {% for cls in class__ %}
+                    <option value="{{cls.ma_lop}}">{{ cls.ten }}</option>
                     {% endfor %}
                 </select>
             </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Cột Điểm 15P</label>
+                <select id="columnSelector15p" class="class-select w-full px-4 py-2 border rounded-lg">
+                    <option value="">Số Cột</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 font-bold mb-2">Cột điểm 1 tiết</label>
+                <select id="columnSelector1t" class="class-select w-full px-4 py-2 border rounded-lg">
+                    <option value="">Số Cột</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+            </div>
         </div>
-
         <!-- Số cột điểm -->
-        <div class="mt-4 grid grid-cols-2 gap-4">
-            <!-- Số cột điểm 15 phút -->
-            <div>
-                <label class="block text-gray-700 font-bold mb-2">Số cột điểm 15 phút:</label>
-                <input type="number" class="col-15p-input min=" 1" max="5" placeholder="Nhập số cột"
-                    class="w-full px-4 py-2 border rounded-lg">
-            </div>
-
-            <!-- Số cột điểm 1 tiết -->
-            <div>
-                <label class="block text-gray-700 font-bold mb-2">Số cột điểm 1 tiết:</label>
-                <input type="number" class="col-45p-input min=" 1" max="3" placeholder="Nhập số cột"
-                    class="w-full px-4 py-2 border rounded-lg">
-            </div>
+        <div class="mt-4 mx-auto">
+            <button id="creat_table" class="creat_table bg-blue-500 text-white px-4 py-2 rounded-lg">Tạo Bảng Nhập
+                Điểm</button>
         </div>
+    </div>
+    <!-- Danh sách học sinh -->
+    <div class="mt-4 grid bg-white p-6">
+        <h2 class="text-lg font-bold text-gray-700 mb-2">Danh Sách Học Sinh:</h2>
+        <table class="min-w-full border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="border px-4 py-2">MSSV</th>
+                    <th class="border px-4 py-2">Họ và Tên</th>
+                    <th class="border px-4 py-2">Điểm 15 phút</th>
+                    <th class="border px-4 py-2">Điểm 1 tiết</th>
+                    <th class="border px-4 py-2">Điểm Cuối Kỳ</th>
+                </tr>
+            </thead>
+            <tbody class="student-table-body" id="clist_student">
 
-        <!-- Danh sách học sinh -->
-        <div class="mt-4">
-            <h2 class="text-lg font-bold text-gray-700 mb-2">Danh Sách Học Sinh:</h2>
-            <table class="min-w-full border border-gray-300">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="border px-4 py-2">STT</th>
-                        <th class="border px-4 py-2">Họ và Tên</th>
-                        <th class="border px-4 py-2">Điểm 15 phút</th>
-                        <th class="border px-4 py-2">Điểm 1 tiết</th>
-                        <th class="border px-4 py-2">Điểm Cuối Kỳ</th>
-                    </tr>
-                </thead>
-                <tbody class="student-table-body">
-                    <!-- Danh sách học sinh sẽ được thêm vào đây -->
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Nút lưu -->
-        <div class="mt-4">
-            <button class="save-button bg-blue-500 text-white px-4 py-2 rounded-lg">Lưu điểm</button>
+            </tbody>
+        </table>
+        <div class="mt-4 mx-auto">
+            <button id="saveButton" class="save-button bg-blue-500 text-white px-4 py-2 rounded-lg">Lưu điểm</button>
         </div>
     </div>
 </div>
+
+<script>
+
+    //hàm fetch dữ liệu từ học sinh trong lớp đi ra
+
+    const selectElement = document.getElementById('academicYearSelect');
+    let selectedValue = ""; // Khai báo biến toàn cục
+    selectElement.addEventListener('change', function () {
+        selectedValue = this.value; // Cập nhật giá trị
+    });
+
+    const selectCls = document.getElementById('select_cls');
+
+
+    const selectSubjeck = document.getElementById('monhoc');
+    let Value_selectSubjeck = ""
+    selectSubjeck.addEventListener('change', function () {
+        Value_selectSubjeck = this.value
+    })
+
+
+    selectCls.addEventListener('change', function () {
+        // Lấy giá trị đã chọn
+        const selectedValue_class = parseInt(selectCls.value) || 0;
+        fetch(`/api/get_hoc`, {
+            method: 'POST',
+
+            body: JSON.stringify({
+                "lop_hoc_id": selectedValue_class
+            }), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Lỗi khi lấy dữ liệu từ server.');
+            }
+            return response.json();
+        }).then(data => {
+            data = data["data"]
+
+        })
+
+
+    });
+
+    // Bạn có thể sử dụng selectedValue ở nơi khác sau khi người dùng chọn
+
+
+    const createTableButton = document.getElementById('creat_table');
+    createTableButton.addEventListener('click', () => {
+
+        const selectCls = document.getElementById('select_cls');
+        const selectedValue = parseInt(selectCls.value) || 0;
+
+        const columnSelector15p = document.getElementById('columnSelector15p');
+        const Value_15p = parseInt(columnSelector15p.value) || 0;
+
+        const columnSelector1t = document.getElementById('columnSelector1t');
+        const Value_1t = parseInt(columnSelector1t.value) || 0;
+
+
+
+
+
+
+        // alert("Value_1t" + Value_1t)
+        // alert("Value_15p" + Value_15p)
+        // alert("selectedValue" + selectedValue)
+
+        // Kiểm tra nếu giá trị không hợp lệ thì không gửi request
+        if (!selectedValue) {
+            alert("Vui Lòng Chọn Lớp")
+            return;
+        }
+        // console.log(selectedValue);
+
+        // Gửi yêu cầu fetch đến server
+        fetch(`/api/get_students_in_class`, {
+            method: 'POST',
+
+            body: JSON.stringify({
+                "malop": selectedValue
+            }), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error('Lỗi khi lấy dữ liệu từ server.');
+            }
+            return response.json();
+        }).then(data => {
+
+            // arryStudents = [...data["data"]];
+
+            const tbody = document.getElementById('clist_student');
+            tbody.innerHTML = ''; // Xóa tất cả các dòng hiện tại trong tbody
+
+            data["data"].forEach(student => {
+                // Tạo một dòng mới cho mỗi học sinh
+                const row = document.createElement('tr');
+
+                // Tạo cột để nhập điểm cho "15 phút"
+                const inputContainer15p = document.createElement('td');
+                inputContainer15p.className = 'inputContainer15p border px-4 py-2 ';
+                // inputContainer15p.style.display = 'flex';
+                // inputContainer15p.style.gap = '5px'
+
+                // Số ô nhập liệu mặc định cho "15 phút"
+                const numberOfInputs15p = Value_15p; // Bạn có thể điều chỉnh số lượng ô nhập ở đây
+                for (let i = 0; i < numberOfInputs15p; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = '1';
+                    input.placeholder = 'Điểm';
+                    input.className = `id:${student.ma_hoc_sinh} border rounded px-1 py-0.5 text-sm w-16`;
+                    input.setAttribute('data-id', student.ma_hoc_sinh); // Gán data-id là mã học sinh
+                    input.setAttribute('data-type', '1');
+                    inputContainer15p.appendChild(input);
+                }
+
+                // Tạo cột để nhập điểm cho "1 tiết"
+                const inputContainer1t = document.createElement('td');
+                inputContainer1t.className = 'inputContainer1t border px-4 py-2';
+                // inputContainer1t.style.display = 'flex';
+                // inputContainer1t.style.gap = '5px'
+
+                // Số ô nhập liệu mặc định cho "1 tiết"
+                const numberOfInputs1t = Value_1t; // Bạn có thể điều chỉnh số lượng ô nhập ở đây
+                for (let i = 0; i < numberOfInputs1t; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = '1';
+                    input.placeholder = 'Điểm';
+                    input.className = `id:${student.ma_hoc_sinh} border rounded px-1 py-0.5 text-sm w-16`;
+                    input.setAttribute('data-id', student.ma_hoc_sinh); // Gán data-id là mã học sinh
+                    input.setAttribute('data-type', '2');
+                    inputContainer1t.appendChild(input);
+                }
+
+                const inputCuoiky = document.createElement('td');
+                inputCuoiky.className = 'inputContainer1t border px-4 py-2';
+                // inputContainer1t.style.display = 'flex';
+                // inputContainer1t.style.gap = '5px'
+
+                // Bạn có thể điều chỉnh số lượng ô nhập ở đây
+                for (let i = 0; i < 1; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = '1';
+                    input.placeholder = 'Điểm';
+                    input.className = `id:${student.ma_hoc_sinh} border rounded px-1 py-0.5 text-sm w-16`;
+                    input.setAttribute('data-id', student.ma_hoc_sinh); // Gán data-id là mã học sinh
+                    input.setAttribute('data-type', '3');
+                    inputCuoiky.appendChild(input);
+                }
+
+
+
+                // Thêm dữ liệu học sinh vào các cột khác
+                row.innerHTML = `
+            <td class="border px-4 py-2">${student.ma_hoc_sinh}</td>
+            <td class="border px-4 py-2">${student.ho_ten}</td>
+        `;
+
+                // Thêm các ô nhập vào dòng
+                row.appendChild(inputContainer15p);
+                row.appendChild(inputContainer1t);
+                row.appendChild(inputCuoiky);
+
+
+                // Thêm dòng vào bảng
+                tbody.appendChild(row);
+            });
+        })
+    });
+
+    function getStudentScores() {
+        const selectSubjeck = document.getElementById('monhoc');
+        const Value_Subjeck = parseInt(selectSubjeck.value) || 0;
+
+        const selectCls__ = document.getElementById('select_cls');
+        const selectedValue__ = parseInt(selectCls__.value) || 0;
+
+        const inputs = document.querySelectorAll('input[data-id][data-type]');
+        const groupedData = {};
+        // Duyệt qua các thẻ input
+        const arrryID = []
+
+        inputs.forEach(input => {
+            const dataId = input.getAttribute('data-id');
+            const dataType = input.getAttribute('data-type');
+            const value = input.value || null;
+
+            // Nếu chưa có nhóm cho dataId, khởi tạo
+            if (!groupedData[dataId]) {
+                groupedData[dataId] = {};
+            }
+
+            // Nếu chưa có mảng cho dataType, khởi tạo
+            if (!groupedData[dataId][dataType]) {
+                groupedData[dataId][dataType] = [];
+            }
+
+            // Thêm giá trị vào nhóm
+            // groupedData[dataId][dataType].push(value);
+            groupedData[dataId][dataType].push({
+                value: value,
+                dataId: dataId
+            });
+            // tạo một mảng lưu tất cả mã học sinh
+            if (!arrryID.includes(dataId)) {
+                arrryID.push(dataId);
+            }
+
+        });
+
+        const save_hoc = {
+            key: "save_diem",
+            lop_hoc_id: selectedValue__,
+            mon_hoc_id: Value_Subjeck,
+            data: arrryID
+        };
+        console.log("arrryIDSavweeHOc===>", save_hoc)
+
+        fetch('/api/add_hoc', {
+            method: "POST",
+            body: JSON.stringify(save_hoc), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            return response.json();
+        }).then(data => {
+            alert("Phản hồi từ server: " + JSON.stringify(data));
+            // Xử lý kết quả trả về từ server (có thể reset mảng hoặc cập nhật giao diện)
+            arryAdd = []; // Reset mảng sau khi lưu thành công
+        })
+            .catch(error => {
+                console.error("Lỗi xảy ra:", error);
+                alert("Có lỗi xảy ra khi gửi dữ liệu.");
+            });
+
+
+
+
+
+
+        const dataToSend = {
+            key: "save_diem",
+            data: Object.values(groupedData),
+            hoc_ky_id: selectedValue,
+            lop_hoc_id: selectedValue__,
+            mon_hoc_id: Value_Subjeck
+        };
+        fetch('/api/add_diem', {
+            method: "POST",
+            body: JSON.stringify(dataToSend), // Truyền trực tiếp JSON
+            headers: {
+                'Content-Type': 'application/json' // Định nghĩa kiểu dữ liệu JSON
+            }
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+            return response.json();
+        })
+            .then(data => {
+                alert("Phản hồi từ server: " + JSON.stringify(data));
+                // Xử lý kết quả trả về từ server (có thể reset mảng hoặc cập nhật giao diện)
+                arryAdd = []; // Reset mảng sau khi lưu thành công
+            })
+            .catch(error => {
+                console.error("Lỗi xảy ra:", error);
+                alert("Có lỗi xảy ra khi gửi dữ liệu.");
+            });
+        console.log(Object.values(groupedData));
+    }
+
+    const ButtonSave = document.getElementById('saveButton');
+    ButtonSave.addEventListener('click', () => {
+        getStudentScores()
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
 
 {% endblock %}

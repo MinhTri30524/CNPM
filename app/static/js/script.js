@@ -25,7 +25,12 @@ function handleClassSelection(selectElement) {
         },
         body: JSON.stringify(requestData) // Gửi dữ liệu lớp
     })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to add to hoc: " + response.statusText);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.message === 'Students fetched successfully') {
                 // Hiển thị danh sách học sinh trong lớp
